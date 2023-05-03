@@ -1,0 +1,26 @@
+<%@page import="java.util.List"%>
+<%@page import="org.eni.encheres.bo.Category"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
+<%List<Category> listCategories = (List<Category>)request.getAttribute("listCategories");%>
+
+
+<form method="post" action="<%=request.getContextPath()%>/resultat-recherche">
+  <fieldset>
+    <legend>Filtres :</legend>
+        <div class="form-group">
+      		<input name="item-title" type="text" class="form-control" id="item-title-contains" placeholder="Chercher dans le nom de l'article">
+    	</div>
+    <div class="form-group">
+      <label for="category" class="form-label mt-4">Catégorie :</label>
+      <select class="form-select" id="category" name="category">
+      	<option value="0">Toutes</option>
+        <% for (Category category : listCategories){ %>
+        <option value="<%=category.getNoCategory() %>"><%=category.getLibelle() %></option>
+        <%} %>
+      </select>
+    </div>
+	<button type="submit" class="btn btn-primary">Rechercher</button>
+  </fieldset>
+</form>

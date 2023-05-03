@@ -1,0 +1,47 @@
+<%@page import="java.util.List"%>
+<%@page import="org.eni.encheres.bo.Category"%>
+<%@page import="java.time.LocalDate"%>
+<%@page import="java.time.temporal.ChronoUnit"%>
+<%@page import="org.eni.encheres.bo.Item"%>
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+LocalDate.now();
+List <Item> itemsList = (List <Item>) request.getAttribute("itemsList");
+Integer nbResults = itemsList.size() ;
+
+%>
+
+<div><%=nbResults%> résultat<%=(nbResults>1?"s":"") %></div>
+
+
+<% //-------------------- LISTE DES ENCHERES --------------------- %>
+				<div id="list-items" >
+				<% for (Item item : itemsList) { %>
+					<div class="card mb-3 col-5 d-inline-block">
+						<h3 class="card-header"><%=item.getItemTitle() %></h3>
+						<div class="card-body">
+							<img src="assets/images-item/300x250.svg"/>
+							<p class="card-text">Prix : <%=item.getSellingPrice() %></p>
+							<p class="card-text">Fin de l'enchère : <%=item.getEndDate() %></p>
+							<p class="card-text">Vendeur : <%= item.getUser().getUsername() %></p>
+						</div>
+					<div class="card-body">
+					    <a href="#" class="card-link btn btn-success">Voir l'article</a>
+					</div>
+					<% // gestion de l'antériorité du post %>
+					<div class="card-footer text-muted">
+						<% //
+						long daysBetween = ChronoUnit.DAYS.between(item.getStartDate(), LocalDate.now()); 
+						if (daysBetween==0){ %>
+							<p class="card-text">Aujourd'hui</p>
+						<% } else{%>
+				   		<p class="card-text">Il y a <%= daysBetween %> jour<%= (daysBetween>1)?"s":"" %></p>
+				   		<%} %>
+					   			
+						</div>
+					</div>
+					<%} %>
+				</div>
+<% //-------------------- FIN DES ENCHERES --------------------- %>

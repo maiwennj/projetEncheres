@@ -1,0 +1,26 @@
+@charset "UTF-8";
+
+.navbar{
+	background-color: #8aa626 !important;
+}
+
+main{
+	min-height: 85vh;
+}
+
+.card{
+/* 	display : inline-block !important; */
+	margin : 0px 25px !important;
+}
+
+.btn-success{
+	background-color: #8aa626 !important;
+}
+
+/* .valid:VALID { */
+	
+/* 	BACKGROUND-COLOR: #D8F5C0 !IMPORTANT; */
+/* } */
+
+
+

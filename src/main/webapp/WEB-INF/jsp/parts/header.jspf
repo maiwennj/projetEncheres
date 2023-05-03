@@ -1,0 +1,40 @@
+<%@page import="org.eni.encheres.bo.User"%>
+<%@page import="java.util.List"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    
+<%
+User userConnected = (User)session.getAttribute("user");
+String [][] navDisconnected = {
+		{"S'inscrire / Se connecter","/connexion"},
+};
+
+String [][] navConnected = {
+		{"Enchères","/"},
+		{"Vendre un article","/nouvelle-vente"},
+		{"Mon profil","/mon-profil"},
+		{"Déconnexion","/deconnexion"},
+};
+%>
+    
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+	<div class="container-fluid">
+		<a class="navbar-brand" href="<%=request.getContextPath() %>">Enchères-ENI</a>
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+  		<div class="collapse navbar-collapse justify-content-end" id="navbarColor01">
+     		<ul class="navbar-nav">
+      			<% for (String [] item : userConnected==null?navDisconnected:navConnected ) {%>
+			      	<li class="nav-item">
+			          <a class="nav-link" href="<%= request.getContextPath() + item[1]%>"
+			          	<% if(item [0].equals("Déconnection")){ %>
+			          		onclick="return confirm('Voulez-vous vraiment vous déconnecter ?')"
+			          	<%} ;%>
+			          	><%=item [0]%></a>
+			        </li>
+      			<%} %>	 
+      		</ul>
+   		</div>
+  	</div>
+</nav>
