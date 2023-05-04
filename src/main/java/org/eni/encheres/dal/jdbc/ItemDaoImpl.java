@@ -18,10 +18,16 @@ public class ItemDaoImpl implements ItemDao {
 	
 	final String SELECT_ALL_ITEMS = "SELECT * FROM ARTICLES_VENDUS";
 	final String SELECT_ITEMS_BY_STATE = "SELECT * FROM ARTICLES_VENDUS WHERE etat_vente LIKE ?";
-	final String SELECT_BY_CATEGORY = "SELECT * FROM ARTICLES_VENDUS WHERE no_categorie=?";
-	final String SELECT_BY_TITLE = "SELECT * FROM ARTICLES_VENDUS WHERE nom_article LIKE ?";
-	final String SELECT_BY_TITLE_BY_CATEGORY = "SELECT * FROM ARTICLES_VENDUS WHERE no_categorie=? AND nom_article LIKE ?";
+	final String SELECT_ITEMS_BY_CATEGORY = "SELECT * FROM ARTICLES_VENDUS WHERE no_categorie=?";
+	final String SELECT_ITEMS_BY_TITLE = "SELECT * FROM ARTICLES_VENDUS WHERE nom_article LIKE ?";
+	final String SELECT_ITEMS_BY_TITLE_BY_CATEGORY = "SELECT * FROM ARTICLES_VENDUS WHERE no_categorie=? AND nom_article LIKE ?";
 
+	/**
+	 * Can be used to return an Item with all args.
+	 * @param ResultSet rs
+	 * @return Item
+	 * @throws SQLException
+	 */
 	public Item mapItem(ResultSet rs) throws SQLException {
 		return new Item(
 				rs.getInt(1), 
@@ -32,7 +38,8 @@ public class ItemDaoImpl implements ItemDao {
 				rs.getInt(6), 
 				rs.getInt(7), 
 				new User(rs.getInt(8)),
-				new Category(rs.getInt(9)) 
+				new Category(rs.getInt(9)),
+				rs.getString(10).charAt(0)
 				);
 	}
 	
@@ -55,7 +62,7 @@ public class ItemDaoImpl implements ItemDao {
 	public List<Item> selectByCategory(Integer category) {
 		List<Item> itemsList = new ArrayList<>();
 		try (Connection cnx = ConnectionProvider.getConnection()){
-			PreparedStatement pStmt = cnx.prepareStatement(SELECT_BY_CATEGORY);
+			PreparedStatement pStmt = cnx.prepareStatement(SELECT_ITEMS_BY_CATEGORY);
 			pStmt.setInt(1, category);
 			ResultSet rs = pStmt.executeQuery();
 			while (rs.next()) {
@@ -72,7 +79,7 @@ public class ItemDaoImpl implements ItemDao {
 	public List<Item> selectByTitle(String itemTitle) {
 		List<Item> itemsList = new ArrayList<>();
 		try (Connection cnx = ConnectionProvider.getConnection()){
-			PreparedStatement pStmt = cnx.prepareStatement(SELECT_BY_TITLE);
+			PreparedStatement pStmt = cnx.prepareStatement(SELECT_ITEMS_BY_TITLE);
 			pStmt.setString(1, "%"+itemTitle+"%");
 			ResultSet rs = pStmt.executeQuery();
 			while (rs.next()) {
@@ -90,7 +97,7 @@ public class ItemDaoImpl implements ItemDao {
 		List<Item> itemsList = new ArrayList<>();
 		try (Connection cnx = ConnectionProvider.getConnection()){
 
-			PreparedStatement pStmt = cnx.prepareStatement(SELECT_BY_TITLE_BY_CATEGORY);
+			PreparedStatement pStmt = cnx.prepareStatement(SELECT_ITEMS_BY_TITLE_BY_CATEGORY);
 			pStmt.setInt(1, category);
 			pStmt.setString(2, "%"+itemTitle+"%");
 

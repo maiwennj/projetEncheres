@@ -1,6 +1,7 @@
 package org.eni.encheres.bo;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,10 +20,33 @@ public class Item {
 	@NonNull private String description;
 	@NonNull private LocalDate startDate;
 	@NonNull private LocalDate endDate;
-	@NonNull private Integer initialePrice;
-	@NonNull private Integer sellingPrice;
+	@NonNull private Integer initialPrice;
+	private Integer sellingPrice;
 	@NonNull private User user;
 	@NonNull private Category category;
-//	private String state;
+	private Character state;
 	
+	// this constructor is used for the Items created by an user (noItem will be generated, and sellingPrice will be initialized at null)
+	public Item(@NonNull String itemTitle, @NonNull String description, @NonNull LocalDate startDate,
+			@NonNull LocalDate endDate, @NonNull Integer initialPrice, @NonNull User user, @NonNull Category category,
+			Character state) {
+		super();
+		this.itemTitle = itemTitle;
+		this.description = description;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.initialPrice = initialPrice;
+		this.user = user;
+		this.category = category;
+		this.state = state;
+	}
+
+	
+	
+	// TEST ENCHERES A SUPPRIMER
+	
+	public Item(Integer noItem) {
+		super();
+		this.noItem = noItem;
+	}
 }

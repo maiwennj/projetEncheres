@@ -19,5 +19,9 @@ public class DaoFactory {
 		return new CategoryDaoImpl();
 	}
 	
+	public static AuctionDao getAuctionDao() {
+		return new AuctionDaoImpl();
+	}
+	
 
 }
