@@ -1,6 +1,6 @@
 package org.eni.encheres.bo;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +13,7 @@ public class Auction {
 	
 	private User user;
 	private Item item;
-	private LocalDate auctionDate;
+	private LocalDateTime auctionDate;
 	private Integer bid;
 	
 }

@@ -6,15 +6,19 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-
+import java.security.DrbgParameters.NextBytes;
+import java.time.LocalDateTime;
 import java.util.List;
 
+import org.eni.encheres.bll.AuctionManager;
 import org.eni.encheres.bll.CategoryManager;
 import org.eni.encheres.bll.ItemManager;
 import org.eni.encheres.bll.UserManager;
+import org.eni.encheres.bo.Auction;
 import org.eni.encheres.bo.Category;
 import org.eni.encheres.bo.Item;
 import org.eni.encheres.bo.ItemsStates;
+import org.eni.encheres.bo.User;
 
 @WebServlet("")
 public class HomeServlet extends HttpServlet {
