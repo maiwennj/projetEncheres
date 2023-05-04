@@ -12,7 +12,7 @@ String [][] navDisconnected = {
 String [][] navConnected = {
 		{"Enchères","/"},
 		{"Vendre un article","/nouvelle-vente"},
-		{"Mon profil","/mon-profil"},
+		{"Mon profil","/profil/"+((userConnected!=null)?userConnected.getNoUser():"")},
 		{"Déconnexion","/deconnexion"},
 };
 %>

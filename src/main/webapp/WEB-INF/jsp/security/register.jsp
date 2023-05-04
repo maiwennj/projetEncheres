@@ -36,7 +36,7 @@
 								
 								<fieldset>
 									<div class="page-header text-center">
-										<h2>Mon profil</h2>
+										<h2>Créer mon profil</h2>
 									</div>
 									
 									<div class="form-group row">

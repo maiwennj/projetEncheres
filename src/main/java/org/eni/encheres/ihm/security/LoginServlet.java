@@ -26,10 +26,10 @@ public class LoginServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
-			String username = request.getParameter("username").trim();
+			String login = request.getParameter("login").trim();
 			String password = request.getParameter("password").trim();
 
-			User user = UserManager.getInstance().login(username,password);
+			User user = UserManager.getInstance().login(login,password);
 			
 			HttpSession session = request.getSession();
 			session.setAttribute("user", user);

@@ -30,19 +30,19 @@ public class RegisterServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
-			String username = request.getParameter("username").trim();
-			String lastname = request.getParameter("lastname").trim();
-			String firstname = request.getParameter("firstname").trim();
-			String email = request.getParameter("email").trim();
-			String phoneNumber = request.getParameter("phone-number").trim();
-			String street = request.getParameter("street").trim();
-			String postCode = request.getParameter("post-code").trim();
-			String city = request.getParameter("city").trim();
 			String password = request.getParameter("password").trim();
 			String passwordConfirmation = request.getParameter("password-confirmation").trim();
-			
 			// vérifie si les deux mots de passe sont identiques
 			if(password.equals (passwordConfirmation)) {
+					String username = request.getParameter("username").trim();
+					String lastname = request.getParameter("lastname").trim();
+					String firstname = request.getParameter("firstname").trim();
+					String email = request.getParameter("email").trim();
+					String phoneNumber = request.getParameter("phone-number").trim();
+					String street = request.getParameter("street").trim();
+					String postCode = request.getParameter("post-code").trim();
+					String city = request.getParameter("city").trim();
+					
 					User user = new User(username, firstname, lastname, email, phoneNumber, street, postCode, city, password);
 					UserManager.getInstance().addUser(user);
 					

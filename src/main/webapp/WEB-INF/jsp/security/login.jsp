@@ -34,12 +34,12 @@
 							<% } %>
 							<%// --------- field errors -------------- %>
 						
-							<form  method="post" action="" class="form-validate form-horizontal well">
+							<form  id="login" method="post" action="" class="form-validate form-horizontal well">
 								<div class="form-group row">
 									<div class="row mt-5">
-										<label class="col-sm-2 col-form-label " for="username">Nom d'utilisateur</label>
+										<label class="col-sm-2 col-form-label " for="login">Nom d'utilisateur ou adresse mail</label>
 										<div class="col-sm-4">
-											<input  class="form-control"  id="username" name="username" type="text">
+											<input  class="form-control"  id="login" name="login" type="text">
 										</div>
 									
 									</div>
@@ -56,8 +56,10 @@
 									</div>
 								</div>
 							</form>
-							
-							
+							<script type="text/javascript"> 
+								document.querySelector('#login').onsubmit =function(e) { 
+									e.target.submit(); e.target.reset(); return false; }; 
+							</script>
 						</div>
 						<div class="mt-5 ">
 								<a class="btn btn-outline-warning btn-lg" href="<%= request.getContextPath()%>/inscription">Créer un compte</a>			
