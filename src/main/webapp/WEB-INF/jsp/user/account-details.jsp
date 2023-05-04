@@ -2,7 +2,11 @@
 <%@page import="org.eni.encheres.bo.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<% User user = (User) request.getAttribute("user"); %>
+<%
+	User requestUser = (User) request.getAttribute("user"); 
+	User sessionUser = (User) session.getAttribute("user");
+
+%>
 
 <!DOCTYPE html>
 <html>
@@ -20,18 +24,23 @@
 			</header>
 			<main>
 				<div class="row mt-5 text-center">
-					<p> Pseudo:<%=user.getUsername()%></p>
-					<p>Nom: <%= user.getFirstName() %><p>
-					<p>Prenom: <%= user.getLastName() %>
-					<p>Email: <%= user.getEmail() %>  </p>
-					<p>Telephone: <%= user.getPhoneNumber() %>  </p>
-					<p>Rue: <%= user.getStreet()%> </p>
-					<p>Code Postal: <%= user.getPostCode() %> </p>
-					<p>Ville: <%= user.getCity()%> </p>
+					<p>Pseudo: <%=requestUser.getUsername()%></p>
+					<p>Nom: <%= requestUser.getFirstName() %></p>
+					<p>Prenom: <%= requestUser.getLastName() %></p>
+					<p>Email: <%= requestUser.getEmail() %></p>
+					<p>Telephone: <%= requestUser.getPhoneNumber() %></p>
+					<p>Rue: <%= requestUser.getStreet()%> </p>
+					<p>Code Postal: <%= requestUser.getPostCode() %></p>
+					<p>Ville: <%= requestUser.getCity()%></p>
 				</div>
+				<%if(requestUser.getNoUser() == sessionUser.getNoUser()){ %>
+					<div class="mt-5 text-center">
+						<a class="btn btn-warning btn-lg" href="<%=request.getContextPath()%>/modifier-profil">Modifier</a>
+					</div>
+				<%}%>
 			</main>
 			<footer>
-				<%@include file="/WEB-INF/jsp/parts/footer.jspf" %>
+				<%@include file="/WEB-INF/jsp/parts/footer.jspf"%>
 			</footer>
 		</div>
 	</body>
