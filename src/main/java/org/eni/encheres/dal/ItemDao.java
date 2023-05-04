@@ -9,5 +9,5 @@ public interface ItemDao {
 	List<Item> selectByCategory(Integer category);
 	List<Item> selectByTitle(String itemTitle);
 	List<Item> selectByTitleByCategory(String itemTitle,Integer category);
-	
+	List<Item> selectItemsByState (String state);
 }

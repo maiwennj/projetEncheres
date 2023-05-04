@@ -17,6 +17,7 @@ import org.eni.encheres.dal.ItemDao;
 public class ItemDaoImpl implements ItemDao {
 	
 	final String SELECT_ALL_ITEMS = "SELECT * FROM ARTICLES_VENDUS";
+	final String SELECT_ITEMS_BY_STATE = "SELECT * FROM ARTICLES_VENDUS WHERE etat_vente LIKE ?";
 	final String SELECT_BY_CATEGORY = "SELECT * FROM ARTICLES_VENDUS WHERE no_categorie=?";
 	final String SELECT_BY_TITLE = "SELECT * FROM ARTICLES_VENDUS WHERE nom_article LIKE ?";
 	final String SELECT_BY_TITLE_BY_CATEGORY = "SELECT * FROM ARTICLES_VENDUS WHERE no_categorie=? AND nom_article LIKE ?";
@@ -99,6 +100,22 @@ public class ItemDaoImpl implements ItemDao {
 			}
 
 			return itemsList;	
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public List<Item> selectItemsByState(String state) {
+		List<Item> itemsList = new ArrayList<>();
+		try (Connection cnx = ConnectionProvider.getConnection()){
+			PreparedStatement pStmt = cnx.prepareStatement(SELECT_ITEMS_BY_STATE);
+			pStmt.setString(1, state);
+			ResultSet rs = pStmt.executeQuery();
+			while (rs.next()) {
+				itemsList.add(mapItem(rs));
+			}
+			return itemsList;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

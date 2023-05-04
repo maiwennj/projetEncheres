@@ -8,15 +8,15 @@ import org.eni.encheres.dal.jdbc.UserDaoImpl;
 
 public class DaoFactory {
 
-	public static ItemDaoImpl getItemDao() {
+	public static ItemDao getItemDao() {
 		return new ItemDaoImpl();
 	}
 
-	public static UserDaoImpl getUserDao() {
+	public static UserDao getUserDao() {
 		return new UserDaoImpl();
 	}
 
-	public static CategoryDaoImpl getCategoryDao() {
+	public static CategoryDao getCategoryDao() {
 		return new CategoryDaoImpl();
 	}
 	

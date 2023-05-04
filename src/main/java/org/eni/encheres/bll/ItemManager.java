@@ -23,6 +23,10 @@ public class ItemManager {
 		public List<Item> selectAllItems() {
 			return DaoFactory.getItemDao().selectAllItems();
 		}
+		
+		public List<Item> selectItemsByState (String state){
+			return DaoFactory.getItemDao().selectItemsByState(state);
+		}
 
 		/**
 		 * Génère le résultat des recherches effectuées dans les cadres de recherche. Cette fonction vérifie si les deux paramètres

@@ -14,6 +14,7 @@ import org.eni.encheres.bll.ItemManager;
 import org.eni.encheres.bll.UserManager;
 import org.eni.encheres.bo.Category;
 import org.eni.encheres.bo.Item;
+import org.eni.encheres.bo.ItemsStates;
 
 @WebServlet("")
 public class HomeServlet extends HttpServlet {
@@ -21,7 +22,7 @@ public class HomeServlet extends HttpServlet {
        
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		List<Item> itemsList = ItemManager.getInstance().selectAllItems();
+		List<Item> itemsList = ItemManager.getInstance().selectItemsByState(ItemsStates.UNDERWAY.getState());
 		for (Item item : itemsList) {
 			item.setUser(UserManager.getInstance().selectOneUser(item.getUser().getNoUser()));
 		}
