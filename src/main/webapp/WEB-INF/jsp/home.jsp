@@ -26,9 +26,6 @@
 			<header>
 				<%@include file="/WEB-INF/jsp/parts/header.jspf" %>
 			</header>
-			
-
-			
 			<main>
 				<%//----- if account created%>
 					<%if(info!=null){ %>
@@ -37,7 +34,6 @@
 						</div>
 					<%} %>
 				<%//------  if account created %>
-					
 				<div class="text-center mt-5">
 					<h1>Liste des enchères</h1>
 				</div>

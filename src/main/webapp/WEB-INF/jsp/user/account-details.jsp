@@ -1,13 +1,13 @@
 
+<%@page import="org.eni.encheres.helpers.Flash"%>
 <%@page import="org.eni.encheres.bo.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
 	User requestUser = (User) request.getAttribute("user"); 
 	User sessionUser = (User) session.getAttribute("user");
-
+	String info = Flash.getMessage("success", session);
 %>
-
 <!DOCTYPE html>
 <html>
 	<head>
@@ -23,6 +23,13 @@
 				<%@include file="/WEB-INF/jsp/parts/header.jspf" %>
 			</header>
 			<main>
+				<%//----- if account created%>
+					<%if(info!=null){ %>
+						<div class="alert alert-success text-center mt-5">
+						<%= info %>
+						</div>
+					<%} %>
+				<%//------  if account created %>
 				<div class="row mt-5 text-center">
 					<p>Pseudo: <%=requestUser.getUsername()%></p>
 					<p>Nom: <%= requestUser.getFirstName() %></p>

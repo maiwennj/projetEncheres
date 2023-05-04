@@ -11,24 +11,77 @@ import lombok.Getter;
 
 
 public class UserManager {
-
+	//singleton getInstance();
 	@Getter private static UserManager instance = new UserManager();
 	private UserManager() {}
-		
-	public User selectOneUser(Integer noUser) {
-		return DaoFactory.getUserDao().selectOneUser(noUser);
-	}
-
+	
+	//******************** CRUD
+	//CREATE ------------
 	public void addUser(User user) throws BLLException {
 		user.setPassword(BCrypt.withDefaults().hashToString(12, user.getPassword().toCharArray()));
 		checkUser(user);
 		DaoFactory.getUserDao().insertUser(user);
 	}
+	
+	//READ ------------
+	public User selectOneUser(Integer noUser) {
+		return DaoFactory.getUserDao().selectOneUser(noUser);
+	}
 
 	public User getUser(int id) {
 		return DaoFactory.getUserDao().selectOneUser(id);
 	}
-
+	
+	/**
+	 *  1. Vérifie si le compte existe(si existe pas, retourne une erreur)<br/>
+	 *  2. Vérifie si le mot de passe est valide ( si invalide, retourn une erreur <br/>
+	 *  3. Retourne user si tout est bon
+	 *
+	 * @param username
+	 * @param password
+	 * @return user for session
+	 * @throws BLLException
+	 */
+	public User login(String login, String password) throws BLLException {
+		BLLException bll = new BLLException();
+		User user = DaoFactory.getUserDao().selectByLogin(login);
+		if(user!=null) {
+			//on chèque le mot de passe, si c'est bon
+			BCrypt.Result result = BCrypt.verifyer()
+					.verify(password.toCharArray(), user.getPassword());
+			if (!result.verified) {
+				bll.addError("Le mot de passe est erroné");
+				throw bll;
+			} else {
+				return user;
+			}
+		}else {
+			bll.addError("Pas d'utilisateur trouvé");
+			throw bll;
+		}
+	}
+	
+	// UPDATE ------------
+	/**
+	 * 1.cripte le mot de passe, vérifie si c'est le bon <br/>
+	 * 2.fait les checks field et checks is used <br/>
+	 * 3.si les checks sont bon on lance l'update de user <br/>
+	 * 4.après l'update on récupère user pour la session directement dans la BDD <br/>
+	 * @param user
+	 * @throws BLLException 
+	 */
+	public void updateUser(User userUpdate, Integer noUser) throws BLLException {
+		userUpdate.setPassword(BCrypt.withDefaults().hashToString(12, userUpdate.getPassword().toCharArray()));
+		checkUpdate(userUpdate,noUser);
+		DaoFactory.getUserDao().updateUser(userUpdate,noUser);
+	}
+	
+	//DELETE ------------
+	
+	
+	
+	//CHECKS ------------
+	
 	/**
 	 * Vérifie tous les champs de user en utilisant la méthode checkField
 	 * 
@@ -117,79 +170,36 @@ public class UserManager {
 			}
 		}
 	}
-
-	
-	/**
-	 *  1. Vérifie si le compte existe(si existe pas, retourne une erreur)<br/>
-	 *  2. Vérifie si le mot de passe est valide ( si invalide, retourn une erreur <br/>
-	 *  3. Retourne user si tout est bon
-	 *
-	 * @param username
-	 * @param password
-	 * @return user for session
-	 * @throws BLLException
-	 */
-	public User login(String login, String password) throws BLLException {
-		BLLException bll = new BLLException();
-		User user = DaoFactory.getUserDao().selectByLogin(login);
-		if(user!=null) {
-			//on chèque le mot de passe, si c'est bon
-			BCrypt.Result result = BCrypt.verifyer()
-					.verify(password.toCharArray(), user.getPassword());
-			if (!result.verified) {
-				bll.addError("Le mot de passe est erroné");
-				throw bll;
-			} else {
-				return user;
-			}
-		}else {
-			bll.addError("Pas d'utilisateur trouvé");
-			throw bll;
-		}
-	}
-
-	/**
-	 * 
-	 * @param user
-	 * @throws BLLException 
-	 */
-	public void updateUser(User user, Integer noUser) throws BLLException {
-		user.setPassword(BCrypt.withDefaults().hashToString(12, user.getPassword().toCharArray()));
-		checkUpdate(user,noUser);
-		DaoFactory.getUserDao().updateUser(user,noUser);
-		
-	}
-
-	private void checkUpdate(User user, Integer noUser) throws BLLException {
+	private void checkUpdate(User userUpdate, Integer noUser) throws BLLException {
 		BLLException bll = new BLLException();
 		//vérification si username utilisé par un autre utilisateur
-		if (DaoFactory.getUserDao().checkUsernameIsNotUsed(user.getUsername(),noUser)!=null) {
+		if (DaoFactory.getUserDao().checkUsernameIsNotUsed(userUpdate.getUsername(),noUser)!=null) {
 			bll.addError("Le nom d'utilisateur est déjà utilisé par un autre utilisateur");
 		}else {//vérification des champs de saisie
-			if (!user.getUsername().matches("[A-Za-z0-9]{3,30}")) {
+			if (!userUpdate.getUsername().matches("[A-Za-z0-9]{3,30}")) {
 				bll.addError("Le nom d'utilisateur doit être constitué uniquement de caractères alphanumériques");
 			}
-			if(user.getUsername().length()<3) {
+			if(userUpdate.getUsername().length()<3) {
 				bll.addError("Le pseudo n'est pas assez long");
 			}
 		}
 		//vérification si email utilisé par un autre utilisateur
-		if (DaoFactory.getUserDao().checkEmailIsNotUsed(user.getEmail(),noUser)!=null) {
+		if (DaoFactory.getUserDao().checkEmailIsNotUsed(userUpdate.getEmail(),noUser)!=null) {
 			bll.addError("Le mail est déjà utilisé par un autre utilisateur");
 		}else {//vérification des champs de saisie
-			if(!user.getEmail().matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+			if(!userUpdate.getEmail().matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
 				bll.addError("Le champs email ne respect pas le format attendu");	
 			}
-			if(user.getEmail().length()>20) {
+			if(userUpdate.getEmail().length()>20) {
 				bll.addError("Le champs email ne doit pas dépasser 20 charactères");	
 			}
 		}
-		checkField(user.getLastName(),"nom",bll);
-		checkField(user.getFirstName(),"prénom",bll);
-		checkField(user.getPhoneNumber(),"numéro de téléphone",bll);
-		checkField(user.getStreet(),"rue",bll);
-		checkField(user.getPostCode(),"code postal",bll);
-		checkField(user.getCity(),"ville",bll);
+		checkField(userUpdate.getLastName(),"nom",bll);
+		checkField(userUpdate.getFirstName(),"prénom",bll);
+		checkField(userUpdate.getPhoneNumber(),"numéro de téléphone",bll);
+		checkField(userUpdate.getStreet(),"rue",bll);
+		checkField(userUpdate.getPostCode(),"code postal",bll);
+		checkField(userUpdate.getCity(),"ville",bll);
 		if (bll.getErreurs().size()>0) {
 			throw bll;
 		}

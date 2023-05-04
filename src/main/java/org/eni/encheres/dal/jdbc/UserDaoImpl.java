@@ -28,7 +28,7 @@ public class UserDaoImpl implements UserDao{
 	final String SELECT_BY_MAIL = "SELECT * FROM UTILISATEURS WHERE email=?";
 	final String SELECT_BY_LOGIN = "SELECT * FROM UTILISATEURS WHERE email=? OR pseudo=?";
 	final String UPDATE_USER = "UPDATE UTILISATEURS SET pseudo=?,nom=?,prenom=?,email=?,telephone=?,rue=?,code_postal=?,ville=?,mot_de_passe=? WHERE no_utilisateur=?";
-	//à simplifier
+	//factorisé: final String CHECK_IS_USED = "SELECT * FROM UTILISATEURS WHERE ?=? AND no_utilisateur!=?";
 	final String CHECK_USERNAME_USED = "SELECT * FROM UTILISATEURS WHERE pseudo=? AND no_utilisateur!=?";
 	final String CHECK_EMAIL_USED = "SELECT * FROM UTILISATEURS WHERE email=? AND no_utilisateur!=?";
 	
@@ -169,6 +169,23 @@ public class UserDaoImpl implements UserDao{
 		}
 		return null;
 	}
+	
+	//version factorisée
+//	public Object checkIsNotUsed(String email, int noUser, String colomn) {
+//		try (Connection cnx = ConnectionProvider.getConnection()) {
+//			PreparedStatement pStmt = cnx.prepareStatement(CHECK_IS_USED);
+//			pStmt.setString(1, email);
+//			pStmt.setString(2, colomn);
+//			pStmt.setInt(3, noUser);
+//			ResultSet rs = pStmt.executeQuery();
+//			if (rs.next()) {
+//				return mapUser(rs);
+//			}
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//		return null;
+//	}
 
 
 	public Object checkEmailIsNotUsed(String email, int noUser) {

@@ -28,7 +28,7 @@ String [][] navConnected = {
       			<% for (String [] item : userConnected==null?navDisconnected:navConnected ) {%>
 			      	<li class="nav-item">
 			          <a class="nav-link" href="<%= request.getContextPath() + item[1]%>"
-			          	<% if(item [0].equals("Déconnection")){ %>
+			          	<% if(item [0].equals("Déconnexion")){ %>
 			          		onclick="return confirm('Voulez-vous vraiment vous déconnecter ?')"
 			          	<%} ;%>
 			          	><%=item [0]%></a>
