@@ -1,3 +1,4 @@
+<%@page import="org.eni.encheres.bo.ItemAllInformation"%>
 <%@page import="java.time.LocalDateTime"%>
 <%@page import="java.util.List"%>
 <%@page import="org.eni.encheres.bo.Category"%>
@@ -9,7 +10,7 @@
     pageEncoding="UTF-8"%>
 <%
 LocalDate.now();
-List <Item> itemsList = (List <Item>) request.getAttribute("itemsList");
+List <ItemAllInformation> itemsList = (List <ItemAllInformation>) request.getAttribute("itemsList");
 Integer nbResults = itemsList.size() ;
 
 %>
@@ -19,14 +20,14 @@ Integer nbResults = itemsList.size() ;
 
 <% //-------------------- LISTE DES ENCHERES --------------------- %>
 				<div id="list-items" >
-				<% for (Item item : itemsList) { %>
+				<% for (ItemAllInformation itemAllInfo : itemsList) { %>
 					<div class="card mb-3 col-5 d-inline-block">
-						<h3 class="card-header"><%=item.getItemTitle() %></h3>
+						<h3 class="card-header"><%=itemAllInfo.getItem().getItemTitle() %></h3>
 						<div class="card-body">
 							<img src="assets/images-item/300x250.svg"/>
-							<p class="card-text">Prix : <%=item.getSellingPrice() %></p>
-							<p class="card-text">Fin de l'enchère : <%=item.getEndDate() %></p>
-							<p class="card-text">Vendeur : <%= item.getUser().getUsername() %></p>
+							<p class="card-text">Prix : <%= ((itemAllInfo.getAuction().getBid())!=null?itemAllInfo.getAuction().getBid():itemAllInfo.getItem().getInitialPrice()) %></p>
+							<p class="card-text">Fin de l'enchère : <%=itemAllInfo.getItem().getEndDate() %></p>
+							<p class="card-text">Vendeur : <%= itemAllInfo.getUser().getUsername() %></p>
 						</div>
 					<div class="card-body">
 					    <a href="#" class="card-link btn btn-success">Voir l'article</a>
@@ -34,7 +35,7 @@ Integer nbResults = itemsList.size() ;
 					<% // gestion de l'antériorité du post %>
 					<div class="card-footer text-muted">
 						<% //
-						long daysBetween = ChronoUnit.DAYS.between(item.getStartDate(), LocalDateTime.now()); 
+						long daysBetween = ChronoUnit.DAYS.between(itemAllInfo.getItem().getStartDate(), LocalDateTime.now()); 
 						if (daysBetween==0){ %>
 							<p class="card-text">Aujourd'hui</p>
 						<% } else{%>

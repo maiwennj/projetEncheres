@@ -33,23 +33,23 @@ public class AuctionDaoImpl implements AuctionDao {
 		
 	}
 
-	@Override
-	public Auction selectOneAuctionByNoItem(Integer id) {
-		try (Connection cnx = ConnectionProvider.getConnection()) {
-			PreparedStatement pStmt = cnx.prepareStatement(SELECT_BY_NO_ITEM);
-			pStmt.setInt(1, id);
-			ResultSet rs = pStmt.executeQuery();
-			if (rs.next()) {
-				return new Auction(
-						new User(rs.getInt(1)),
-						new Item(rs.getInt(2)),
-						rs.getTimestamp(3).toLocalDateTime(),
-						rs.getInt(4));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+//	@Override
+//	public Auction selectOneAuctionByNoItem(Integer id) {
+//		try (Connection cnx = ConnectionProvider.getConnection()) {
+//			PreparedStatement pStmt = cnx.prepareStatement(SELECT_BY_NO_ITEM);
+//			pStmt.setInt(1, id);
+//			ResultSet rs = pStmt.executeQuery();
+//			if (rs.next()) {
+//				return new Auction(
+//						new User(rs.getInt(1)),
+//						new Item(rs.getInt(2)),
+//						rs.getTimestamp(3).toLocalDateTime(),
+//						rs.getInt(4));
+//			}
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//		return null;
+//	}
 
 }

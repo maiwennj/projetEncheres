@@ -15,9 +15,9 @@ public class AuctionManager {
 		DaoFactory.getAuctionDao().insertAuction(auction);
 	}
 
-	public Auction selectOneAuctionByNoItem(Integer id) {
-		return DaoFactory.getAuctionDao().selectOneAuctionByNoItem(id);
-	}
+//	public Auction selectOneAuctionByNoItem(Integer id) {
+//		return DaoFactory.getAuctionDao().selectOneAuctionByNoItem(id);
+//	}
 		
 	
 }

@@ -8,6 +8,6 @@ public interface AuctionDao {
 
 	void insertAuction(Auction auction);
 
-	Auction selectOneAuctionByNoItem(Integer id);
+//	Auction selectOneAuctionByNoItem(Integer id);
 
 }

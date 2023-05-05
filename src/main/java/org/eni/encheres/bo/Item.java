@@ -41,12 +41,26 @@ public class Item {
 		this.state = state;
 	}
 
-	
-	
-	// TEST ENCHERES A SUPPRIMER
-	
-	public Item(Integer noItem) {
+	/**
+	 * This constructor is used when an object ItemAllInformation is created by a search result.
+	 * @param noItem
+	 * @param itemTitle
+	 * @param description
+	 * @param startDate
+	 * @param endDate
+	 * @param initialPrice
+	 * @param user
+	 */
+	public Item(Integer noItem, @NonNull String itemTitle, @NonNull String description,
+			@NonNull LocalDateTime startDate, @NonNull LocalDateTime endDate, @NonNull Integer initialPrice) {
 		super();
 		this.noItem = noItem;
+		this.itemTitle = itemTitle;
+		this.description = description;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.initialPrice = initialPrice;
 	}
+
+	
 }

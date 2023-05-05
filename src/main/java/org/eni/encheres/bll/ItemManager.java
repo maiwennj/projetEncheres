@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eni.encheres.bo.Item;
+import org.eni.encheres.bo.ItemAllInformation;
+import org.eni.encheres.bo.ItemsStates;
 import org.eni.encheres.dal.DaoFactory;
 
 import lombok.Getter;
@@ -20,12 +22,12 @@ public class ItemManager {
 	//CREATE
 	
 	//READ
-		public List<Item> selectAllItems() {
-			return DaoFactory.getItemDao().selectAllItems();
-		}
-		
-		public List<Item> selectItemsByState (String state){
-			return DaoFactory.getItemDao().selectItemsByState(state);
+//		public List<ItemAllInformation> selectAllItems() {
+//			return DaoFactory.getItemDao().selectAllItems();
+//		}
+//		
+		public List<ItemAllInformation> selectItemsByState (String itemState){
+			return DaoFactory.getItemDao().selectItemsByState(itemState);
 		}
 
 		/**
@@ -33,39 +35,40 @@ public class ItemManager {
 		 * sont empty ou blank, et redirige vers la méthode la plus adaptée.
 		 * @param category 
 		 * @param itemTitle 
+		 * @param itemState 
 		 * @return List<Item>
 		 */
 //		public List<Item> searchItems(String itemTitle, String category) {
-			public List<Item> searchItems(String itemTitle, Integer category) {
-			List<Item> listItems = new ArrayList<>();
+			public List<ItemAllInformation> searchItems(String itemTitle, Integer category, String itemState) {
+			List<ItemAllInformation> listItems = new ArrayList<>();
 			// is itemTitle blank or empty : YES
 			if (itemTitle.isBlank() || itemTitle.isEmpty()) {
 				if (category==0) {
-					listItems = selectAllItems();
+					listItems = selectItemsByState(itemState);
 				}else {
-					listItems = selectByCategory(category);
+					listItems = selectByCategory(itemState,category);
 				}
 			}else { // is itemTitle blank or empty : NO
 				if (category==0) {
-					listItems = selectByTitle(itemTitle);
+					listItems = selectByTitle(itemState,itemTitle);
 				}else {
-					listItems = selectByTitleByCategory(itemTitle, category);
+					listItems = selectByTitleByCategory(itemState,itemTitle, category);
 				}
 			}
 			return listItems;
 		}
 		
 		
-		public List<Item> selectByCategory(Integer category) {
-			return DaoFactory.getItemDao().selectByCategory(category);
+		public List<ItemAllInformation> selectByCategory(String itemsState, Integer category) {
+			return DaoFactory.getItemDao().selectByCategory(itemsState, category);
 		}
 		
-		public List<Item> selectByTitle(String itemTitle) {
-			return DaoFactory.getItemDao().selectByTitle(itemTitle);
+		public List<ItemAllInformation> selectByTitle(String itemsState, String itemTitle) {
+			return DaoFactory.getItemDao().selectByTitle(itemsState, itemTitle);
 		}
 		
-		public List<Item> selectByTitleByCategory(String itemTitle, Integer category) {
-			return DaoFactory.getItemDao().selectByTitleByCategory(itemTitle, category);
+		public List<ItemAllInformation> selectByTitleByCategory(String itemsState, String itemTitle, Integer category) {
+			return DaoFactory.getItemDao().selectByTitleByCategory(itemsState, itemTitle, category);
 		}
 		
 		
