@@ -10,7 +10,6 @@ import java.security.DrbgParameters.NextBytes;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.eni.encheres.bll.AuctionManager;
 import org.eni.encheres.bll.CategoryManager;
 import org.eni.encheres.bll.ItemManager;
 import org.eni.encheres.bll.UserManager;
