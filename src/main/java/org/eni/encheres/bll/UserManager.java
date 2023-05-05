@@ -75,6 +75,9 @@ public class UserManager {
 	
 	//DELETE ------------
 	
+	public void deleteUser(User user) {
+		DaoFactory.getUserDao().deleteUser(user);
+	}
 	
 	
 	//CHECKS ------------
@@ -259,6 +262,8 @@ public class UserManager {
 			bll.addError("L'adresse email est déjà utilisée");
 		}
 	}
+
+	
 	
 	
 	

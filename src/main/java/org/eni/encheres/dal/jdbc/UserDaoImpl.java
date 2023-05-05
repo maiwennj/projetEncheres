@@ -30,7 +30,7 @@ public class UserDaoImpl implements UserDao{
 	final String UPDATE_USER = "UPDATE UTILISATEURS SET pseudo=?,nom=?,prenom=?,email=?,telephone=?,rue=?,code_postal=?,ville=?,mot_de_passe=? WHERE no_utilisateur=?";
 	final String CHECK_USERNAME_USED = "SELECT * FROM UTILISATEURS WHERE pseudo=? AND no_utilisateur!=?";
 	final String CHECK_EMAIL_USED = "SELECT * FROM UTILISATEURS WHERE email=? AND no_utilisateur!=?";
-	
+	final String DELETE_USER = "DELETE UTILISATEURS WHERE no_utilisateur=?";
 	
 	public List<User> selectAllUsers() {
 		try (Connection cnx = ConnectionProvider.getConnection()) {
@@ -204,6 +204,21 @@ public class UserDaoImpl implements UserDao{
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	
+	@Override
+	public void deleteUser(User user) {
+		try(Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement pStmt = cnx.prepareStatement(DELETE_USER);
+			pStmt.setInt(1, user.getNoUser());
+			
+			pStmt.executeUpdate();
+			
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 }

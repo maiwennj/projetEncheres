@@ -13,4 +13,5 @@ public interface UserDao {
 	Object checkUsernameIsNotUsed(String username, int noUser);
 	Object checkEmailIsNotUsed(String email, int noUser);
 	void updateUser(User user);
+	void deleteUser(User user);
 }

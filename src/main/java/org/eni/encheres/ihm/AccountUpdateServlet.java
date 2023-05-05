@@ -32,7 +32,7 @@ public class AccountUpdateServlet extends HttpServlet {
 			String oldPassword = request.getParameter("old-password").trim();
 			
 			BCrypt.Result result = BCrypt.verifyer()
-					.verify(oldPassword.toCharArray(),((User)session.getAttribute("user")).getPassword());
+					.verify(oldPassword.toCharArray(),oldUser.getPassword());
 			
 			//si le mot de passe est valide on passe à la suite du traitement
 			if(result.verified) {
