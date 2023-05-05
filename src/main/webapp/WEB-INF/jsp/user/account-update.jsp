@@ -9,8 +9,9 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Modifier mon profil</title>
-	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/assets/css/materia.css">
-		<link rel="stylesheet" href="<%=request.getContextPath() %>/assets/css/styles.css"/>
+<%-- 	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/assets/css/materia.css" > --%>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+	<link rel="stylesheet" href="<%=request.getContextPath() %>/assets/css/styles.css"/>
 </head>
 <body>
 	<header>
@@ -123,23 +124,49 @@
 									<div class="col-4">
 										<button type="submit" class="btn btn-outline-success">Enregistrer</button>
 									</div>
+									<%//button trigger modal %>
 									<div class="col-4">
-										<a class="btn btn-outline-danger" href="">Supprimer mon compte</a>
+										<button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteModal">Supprimer mon compte</button>
 									</div>
-								</div>
-								
+								</div>			
 							</div>
 						</fieldset>			
 					</form>
-					
+					<%//modal %>
+					<div class="modal fade " id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content border-danger">
+								<div class="modal-header bg-danger">
+									<h5 class="modal-title" id="deleteModalLabel">Confirmer le mot de passe</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close"> 
+										<span aria-hidden="true">&times;</span> 
+									</button>
+								</div>
+								<form action="<%=request.getContextPath()%>/supprimer-mon-compte" method="post" >
+									<div class="modal-body ">
+										<label for="deletePassword">Mot de passe: </label>
+										<input type="password" name="deletePassword" class="" autofocus required>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+										<button type="submit" class="btn btn-success">Confirmation</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>	
 				</div>
 			</div>
 		</div>
+		
 	</main>
 	
 	<footer>
 		<%@include file="/WEB-INF/jsp/parts/footer.jspf" %>
 	</footer>
-			
+	
+	<script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+	<script src="https://unpkg.com/popper.js" ></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/js/bootstrap.min.js" ></script>
 </body>
 </html>

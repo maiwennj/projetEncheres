@@ -14,35 +14,37 @@ Integer nbResults = itemsList.size() ;
 
 %>
 
-<div><%=nbResults%> résultat<%=(nbResults>1?"s":"") %></div>
-
+	<div class="col-6 mt-2 offset-3">
+		<%=nbResults%> résultat<%=(nbResults>1?"s":"") %>
+	</div>
 
 <% //-------------------- LISTE DES ENCHERES --------------------- %>
-				<div id="list-items" >
+				<div id="list-items" class="col-6 offset-3 mt-5 grid gap-3 mx-auto text-center" >
 				<% for (Item item : itemsList) { %>
-					<div class="card mb-3 col-5 d-inline-block">
-						<h3 class="card-header"><%=item.getItemTitle() %></h3>
-						<div class="card-body">
-							<img src="assets/images-item/300x250.svg"/>
-							<p class="card-text">Prix : <%=item.getSellingPrice() %></p>
-							<p class="card-text">Fin de l'enchère : <%=item.getEndDate() %></p>
-							<p class="card-text">Vendeur : <%= item.getUser().getUsername() %></p>
+					<div class=" d-inline-block p-2 g-col-6 text-left">
+						<div class="card bg-secondary" style="min-width: 25rem;">
+							<h3 class="card-header"><%=item.getItemTitle() %></h3>
+							<div class="card-body">
+								<img src="assets/images-item/300x250.svg"/>
+								<p class="card-text">Prix : <%=item.getSellingPrice() %></p>
+								<p class="card-text">Fin de l'enchère : <%=item.getEndDate() %></p>
+								<p class="card-text">Vendeur : <%= item.getUser().getUsername() %></p>
+							</div>
+							<div class="card-body">
+							    <a href="#" class="card-link btn btn-success">Voir l'article</a>
+							</div>
+							<% // gestion de l'antériorité du post %>
+							<div class="card-footer text-muted">
+								<% //
+								long daysBetween = ChronoUnit.DAYS.between(item.getStartDate(), LocalDateTime.now()); 
+								if (daysBetween==0){ %>
+									<p class="card-text">Aujourd'hui</p>
+								<% } else{%>
+						   		<p class="card-text">Il y a <%= daysBetween %> jour<%= (daysBetween>1)?"s":"" %></p>
+						   		<%} %>
+							</div>
 						</div>
-					<div class="card-body">
-					    <a href="#" class="card-link btn btn-success">Voir l'article</a>
 					</div>
-					<% // gestion de l'antériorité du post %>
-					<div class="card-footer text-muted">
-						<% //
-						long daysBetween = ChronoUnit.DAYS.between(item.getStartDate(), LocalDateTime.now()); 
-						if (daysBetween==0){ %>
-							<p class="card-text">Aujourd'hui</p>
-						<% } else{%>
-				   		<p class="card-text">Il y a <%= daysBetween %> jour<%= (daysBetween>1)?"s":"" %></p>
-				   		<%} %>
-					   			
-						</div>
-					</div>
-					<%} %>
+				<%} %>
 				</div>
 <% //-------------------- FIN DES ENCHERES --------------------- %>

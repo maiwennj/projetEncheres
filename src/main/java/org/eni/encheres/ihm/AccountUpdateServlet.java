@@ -49,8 +49,12 @@ public class AccountUpdateServlet extends HttpServlet {
 					String postCode = request.getParameter("post-code").trim();
 					String city = request.getParameter("city").trim();
 					User newUser = new User(username, firstname, lastname, email, phoneNumber, street, postCode, city, newPassword);
-					UserManager.getInstance().updateUser(newUser, oldUser.getNoUser());
-					newUser = UserManager.getInstance().getUser(oldUser.getNoUser());		
+					//on paramètre le numéro de user pour plus tard et le isAdmin pour la session
+					newUser.setNoUser(oldUser.getNoUser());
+					newUser.setAdmin(oldUser.isAdmin());
+					//on lance l'update de user
+					UserManager.getInstance().updateUser(newUser);
+					//on recupère user dans bdd pour avoir toutes les info à jour
 					session.setAttribute("user", newUser);
 					Flash.send("success", "Votre compte a bien été modifié ", request.getSession());
 					response.sendRedirect(request.getContextPath() + "/profil/" + newUser.getNoUser());

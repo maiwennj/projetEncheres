@@ -40,7 +40,7 @@
 				<div id="search" class="col-6 mt-5 offset-3">
 					<%@include file="/WEB-INF/jsp/parts/search.jspf" %>
 				</div>
-				<div class="mt-5">
+				<div class="">
 				<%@include file="/WEB-INF/jsp/parts/results.jspf" %>
 				</div>
 			</main>
