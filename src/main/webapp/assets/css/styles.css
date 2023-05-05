@@ -2,6 +2,7 @@
 
 .navbar{
 	background-color: #8aa626 !important;
+	padding: 0rem !important;
 }
 
 main{
@@ -17,10 +18,13 @@ main{
 	background-color: #8aa626 !important;
 }
 
-/* .valid:VALID { */
-	
-/* 	BACKGROUND-COLOR: #D8F5C0 !IMPORTANT; */
-/* } */
+.logo:hover{
+	transform: scale(1.02) !important;
+}
+
+.unclickable{
+	pointer-events: none!important;
+}
 
 
 

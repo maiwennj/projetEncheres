@@ -26,10 +26,12 @@ String libelleCategory = searchedCategory.getLibelle();
 				<div id="search" class="col-6 mt-5 offset-3">
 					<%@include file="/WEB-INF/jsp/parts/search.jspf" %>
 				</div>
-				<div class="mt-5">
-					<div><strong>Recherche effectuée :</strong></div>
-					<div>titre = <%=(itemTitle.isEmpty()?"*":itemTitle) %></div>
-					<div>catégorie = <%=(libelleCategory==null )?"toutes":libelleCategory %></div>
+				<div class="mt-2">
+					<div class="col-6 mt-2 offset-3">
+						<div><strong>Recherche effectuée :</strong></div>
+						<div>titre = <%=(itemTitle.isEmpty()?"*":itemTitle) %></div>
+						<div>catégorie = <%=(libelleCategory==null )?"toutes":libelleCategory %></div>
+					</div>
 					<%@include file="/WEB-INF/jsp/parts/results.jspf" %>
 				</div>
 			</main>

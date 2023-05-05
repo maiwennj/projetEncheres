@@ -28,7 +28,6 @@ public class UserDaoImpl implements UserDao{
 	final String SELECT_BY_MAIL = "SELECT * FROM UTILISATEURS WHERE email=?";
 	final String SELECT_BY_LOGIN = "SELECT * FROM UTILISATEURS WHERE email=? OR pseudo=?";
 	final String UPDATE_USER = "UPDATE UTILISATEURS SET pseudo=?,nom=?,prenom=?,email=?,telephone=?,rue=?,code_postal=?,ville=?,mot_de_passe=? WHERE no_utilisateur=?";
-	//factorisé: final String CHECK_IS_USED = "SELECT * FROM UTILISATEURS WHERE ?=? AND no_utilisateur!=?";
 	final String CHECK_USERNAME_USED = "SELECT * FROM UTILISATEURS WHERE pseudo=? AND no_utilisateur!=?";
 	final String CHECK_EMAIL_USED = "SELECT * FROM UTILISATEURS WHERE email=? AND no_utilisateur!=?";
 	
@@ -170,24 +169,6 @@ public class UserDaoImpl implements UserDao{
 		return null;
 	}
 	
-	//version factorisée
-//	public Object checkIsNotUsed(String email, int noUser, String colomn) {
-//		try (Connection cnx = ConnectionProvider.getConnection()) {
-//			PreparedStatement pStmt = cnx.prepareStatement(CHECK_IS_USED);
-//			pStmt.setString(1, email);
-//			pStmt.setString(2, colomn);
-//			pStmt.setInt(3, noUser);
-//			ResultSet rs = pStmt.executeQuery();
-//			if (rs.next()) {
-//				return mapUser(rs);
-//			}
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
-//		return null;
-//	}
-
-
 	public Object checkEmailIsNotUsed(String email, int noUser) {
 		try (Connection cnx = ConnectionProvider.getConnection()) {
 			PreparedStatement pStmt = cnx.prepareStatement(CHECK_EMAIL_USED);
@@ -204,22 +185,21 @@ public class UserDaoImpl implements UserDao{
 	}
 
 	@Override
-	public void updateUser(User user, Integer noUser) {
+	public void updateUser(User newUser) {
 		try (Connection cnx = ConnectionProvider.getConnection()) {
 			PreparedStatement pStmt = cnx.prepareStatement(UPDATE_USER);
-			pStmt.setString(1, user.getUsername());
-			pStmt.setString(2, user.getLastName());
-			pStmt.setString(3, user.getFirstName());
-			pStmt.setString(4, user.getEmail());
-			pStmt.setString(5, user.getPhoneNumber());
-			pStmt.setString(6, user.getStreet());
-			pStmt.setString(7, user.getPostCode());
-			pStmt.setString(8, user.getCity());
-			pStmt.setString(9, user.getPassword());
-			pStmt.setInt(10, noUser);
+			pStmt.setString(1, newUser.getUsername());
+			pStmt.setString(2, newUser.getLastName());
+			pStmt.setString(3, newUser.getFirstName());
+			pStmt.setString(4, newUser.getEmail());
+			pStmt.setString(5, newUser.getPhoneNumber());
+			pStmt.setString(6, newUser.getStreet());
+			pStmt.setString(7, newUser.getPostCode());
+			pStmt.setString(8, newUser.getCity());
+			pStmt.setString(9, newUser.getPassword());
+			pStmt.setInt(10, newUser.getNoUser());
 			
 			pStmt.executeUpdate();
-			user = selectOneUser(noUser);
 			
 		} catch (SQLException e) {
 			e.printStackTrace();

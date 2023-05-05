@@ -12,6 +12,5 @@ public interface UserDao {
 	User selectByLogin(String login);
 	Object checkUsernameIsNotUsed(String username, int noUser);
 	Object checkEmailIsNotUsed(String email, int noUser);
-	void updateUser(User user, Integer noUser);
-
+	void updateUser(User user);
 }

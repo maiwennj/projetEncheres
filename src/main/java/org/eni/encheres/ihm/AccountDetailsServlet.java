@@ -19,8 +19,8 @@ public class AccountDetailsServlet extends HttpServlet {
    
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String params = request.getPathInfo();		
-		int id = Integer.parseInt(params.substring(1));
-		User user = UserManager.getInstance().getUser(id);
+		Integer id = Integer.parseInt(params.substring(1));
+		User user = UserManager.getInstance().selectOneUser(id);
 		request.setAttribute("user", user);
 		request.getRequestDispatcher("/WEB-INF/jsp/user/account-details.jsp")
 		.forward(request, response);
