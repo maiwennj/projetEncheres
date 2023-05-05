@@ -63,6 +63,11 @@ public class ItemManager {
 		public List<Item> selectByTitleByCategory(String itemTitle, Integer category) {
 			return DaoFactory.getItemDao().selectByTitleByCategory(itemTitle, category);
 		}
+
+		public void addItem(Item item) {
+			// TODO Auto-generated method stub
+			
+		}
 		
 	
 	// UPDATE

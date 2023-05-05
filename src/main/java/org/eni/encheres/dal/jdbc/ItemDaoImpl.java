@@ -1,18 +1,26 @@
 package org.eni.encheres.dal.jdbc;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eni.encheres.bo.User;
+import org.apache.tomcat.dbcp.dbcp2.PStmtKey;
+import org.apache.tomcat.jakartaee.bcel.classfile.StackMapType;
 import org.eni.encheres.bo.Category;
 import org.eni.encheres.bo.Item;
 import org.eni.encheres.config.ConnectionProvider;
 import org.eni.encheres.dal.ItemDao;
+
+
 
 public class ItemDaoImpl implements ItemDao {
 	
@@ -20,7 +28,7 @@ public class ItemDaoImpl implements ItemDao {
 	final String SELECT_BY_CATEGORY = "SELECT * FROM ARTICLES_VENDUS WHERE no_categorie=?";
 	final String SELECT_BY_TITLE = "SELECT * FROM ARTICLES_VENDUS WHERE nom_article LIKE ?";
 	final String SELECT_BY_TITLE_BY_CATEGORY = "SELECT * FROM ARTICLES_VENDUS WHERE no_categorie=? AND nom_article LIKE ?";
-
+	final String ADD_ITEM="INSERT INTO ARTICLES_VENDUS (nom_article,description,date_debut_encheres,date_fin_encheres,prix_initial,prix_vente,no_utilisateur,no_categorie,etat_vente) VALUES(?,?,?,?,?,?,?,?)";
 	public Item mapItem(ResultSet rs) throws SQLException {
 		return new Item(
 				rs.getInt(1), 
@@ -31,7 +39,8 @@ public class ItemDaoImpl implements ItemDao {
 				rs.getInt(6), 
 				rs.getInt(7), 
 				new User(rs.getInt(8)),
-				new Category(rs.getInt(9)) 
+				new Category(rs.getInt(9)), 
+				rs.getString(10)
 				);
 	}
 	
@@ -105,6 +114,37 @@ public class ItemDaoImpl implements ItemDao {
 		return null;
 	}
 
+	@Override
+	public void addItem(Item item) {
+		
+
+			
+			try(Connection connection = ConnectionProvider.getConnection()){
+				
+				PreparedStatement  stmt = connection.prepareStatement(ADD_ITEM,PreparedStatement.RETURN_GENERATED_KEYS
+											);
+				stmt.setString(1, item.getItemTitle());
+				stmt.setString(2, item.getDescription());
+				// uniquement la date pas heure
+				stmt.setDate(3,(item.getStartDate().toLocalTime()));
+				stmt.setDate(4,Date.valueOf(item.getEndDate().toLocalDate()));
+				stmt.setInt(5,item.getInitialePrice());
+				stmt.setInt(6, item.getSellingPrice());
+				stmt.setInt(7,item.getCategory().getNoCategory());
+			
+				stmt.executeUpdate();
+				ResultSet rs = stmt.getGeneratedKeys();
+				if(rs.next()) {
+					item.setNoItem(1);
+				}
+				
+			}catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+		}
+	}
 
 
-}
+
+
