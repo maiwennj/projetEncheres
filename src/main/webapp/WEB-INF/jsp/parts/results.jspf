@@ -1,3 +1,4 @@
+<%@page import="java.time.LocalDateTime"%>
 <%@page import="java.util.List"%>
 <%@page import="org.eni.encheres.bo.Category"%>
 <%@page import="java.time.LocalDate"%>
@@ -33,7 +34,7 @@ Integer nbResults = itemsList.size() ;
 					<% // gestion de l'antériorité du post %>
 					<div class="card-footer text-muted">
 						<% //
-						long daysBetween = ChronoUnit.DAYS.between(item.getStartDate(), LocalDate.now()); 
+						long daysBetween = ChronoUnit.DAYS.between(item.getStartDate(), LocalDateTime.now()); 
 						if (daysBetween==0){ %>
 							<p class="card-text">Aujourd'hui</p>
 						<% } else{%>

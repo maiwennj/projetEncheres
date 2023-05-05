@@ -36,9 +36,6 @@ public class SearchResultServlet extends HttpServlet {
 		
 		//pour afficher la recherche au-dessus des résultats
 		request.setAttribute("category", CategoryManager.getInstance().selectOneCategory(idCategory));
-		if (request.getAttribute("category")==null) {
-			System.out.println("Bonjour");
-		}
 		// sert à afficher la liste des catégories dans la recherche
 		List<Category> listCategories = CategoryManager.getInstance().selectAllCategories();
 		request.setAttribute("listCategories", listCategories);
