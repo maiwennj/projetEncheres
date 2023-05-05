@@ -18,8 +18,8 @@ public class Item {
 	private Integer noItem;
 	@NonNull private String itemTitle;
 	@NonNull private String description;
-	@NonNull private LocalDate startDate;
-	@NonNull private LocalDate endDate;
+	@NonNull private LocalDateTime startDate;
+	@NonNull private LocalDateTime endDate;
 	@NonNull private Integer initialPrice;
 	private Integer sellingPrice;
 	@NonNull private User user;
@@ -27,8 +27,8 @@ public class Item {
 	private Character state;
 	
 	// this constructor is used for the Items created by an user (noItem will be generated, and sellingPrice will be initialized at null)
-	public Item(@NonNull String itemTitle, @NonNull String description, @NonNull LocalDate startDate,
-			@NonNull LocalDate endDate, @NonNull Integer initialPrice, @NonNull User user, @NonNull Category category,
+	public Item(@NonNull String itemTitle, @NonNull String description, @NonNull LocalDateTime startDate,
+			@NonNull LocalDateTime endDate, @NonNull Integer initialPrice, @NonNull User user, @NonNull Category category,
 			Character state) {
 		super();
 		this.itemTitle = itemTitle;

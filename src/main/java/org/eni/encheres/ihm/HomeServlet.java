@@ -27,14 +27,12 @@ public class HomeServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		List<Item> itemsList = ItemManager.getInstance().selectItemsByState(ItemsStates.UNDERWAY.getState());
-		for (Item item : itemsList) {
-			item.setUser(UserManager.getInstance().selectOneUser(item.getUser().getNoUser()));
-		}
+//		for (Item item : itemsList) {
+//			item.setUser(UserManager.getInstance().selectOneUser(item.getUser().getNoUser()));
+//		}
 		request.setAttribute("itemsList", itemsList);
-		
 		List<Category> listCategories = CategoryManager.getInstance().selectAllCategories();
 		request.setAttribute("listCategories", listCategories);
-		
 		request.getRequestDispatcher("/WEB-INF/jsp/home.jsp").forward(request, response);
 	}
 

@@ -1,6 +1,7 @@
 package org.eni.encheres.dal;
 
 
+import org.eni.encheres.dal.jdbc.AuctionDaoImpl;
 import org.eni.encheres.dal.jdbc.CategoryDaoImpl;
 import org.eni.encheres.dal.jdbc.ItemDaoImpl;
 import org.eni.encheres.dal.jdbc.UserDaoImpl;
