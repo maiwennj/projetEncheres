@@ -6,9 +6,11 @@ import org.eni.encheres.bo.Item;
 import org.eni.encheres.bo.ItemAllInformation;
 
 public interface ItemDao {
-//	List<ItemAllInformation> selectAllItems();
+
 	List<ItemAllInformation> selectByCategory(String itemsState, Integer category);
 	List<ItemAllInformation> selectByTitle(String itemsState, String itemTitle);
 	List<ItemAllInformation> selectByTitleByCategory(String itemsState, String itemTitle,Integer category);
 	List<ItemAllInformation> selectItemsByState (String itemsState);
+	Item insertItem(Item item);
+
 }

@@ -6,6 +6,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.eni.encheres.bll.CategoryManager;
@@ -20,6 +23,13 @@ public class HomeServlet extends HttpServlet {
        
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+	    String nowDateTime = LocalDateTime.now().format(formatter);
+	    System.out.println(nowDateTime);
+	    nowDateTime.replace(" ", "T");
+		System.out.println(nowDateTime);
+		String inAWeekString = LocalDateTime.now().plusDays(7).format(formatter);
+		
 		List<ItemAllInformation> itemsList = ItemManager.getInstance().selectItemsByState(ItemsStates.UNDERWAY.getState());
 		request.setAttribute("itemsList", itemsList);
 		List<Category> listCategories = CategoryManager.getInstance().selectAllCategories();

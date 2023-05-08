@@ -2,6 +2,7 @@ package org.eni.encheres.bll;
 
 import java.util.List;
 
+import org.eni.encheres.bll.exception.BLLException;
 import org.eni.encheres.bo.Category;
 import org.eni.encheres.dal.DaoFactory;
 
@@ -16,13 +17,11 @@ public class CategoryManager {
 		return DaoFactory.getCategoryDao().selectAllCategories();
 	}
 
-	public Category selectOneCategory(Integer idCategory) {
+	public Category selectOneCategory(Integer idCategory){
 		if (idCategory==0) {
 			return new Category();
 		}
 		return DaoFactory.getCategoryDao().selectOneCategory(idCategory);
 	}
-	
-	
 	
 }

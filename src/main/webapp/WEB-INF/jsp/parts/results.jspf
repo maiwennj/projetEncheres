@@ -21,7 +21,7 @@ Integer nbResults = itemsList.size() ;
 	</div>
 
 <% //-------------------- LISTE DES ENCHERES --------------------- %>
-				<div id="list-items" class="col-6 offset-3 mt-5 grid gap-3 mx-auto text-center" >
+				<div id="list-items" class="col-10 mt-5 grid gap-3 mx-auto text-center" >
 				<% for (ItemAllInformation itemAllInfo : itemsList) { %>
 					<div class=" d-inline-block p-2 g-col-6 text-left">
 						<div class="card bg-secondary" style="min-width: 25rem;">
