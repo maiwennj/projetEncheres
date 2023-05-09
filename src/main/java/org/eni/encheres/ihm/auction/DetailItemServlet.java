@@ -11,10 +11,12 @@ import java.io.IOException;
 
 import org.eni.encheres.bll.AuctionManager;
 import org.eni.encheres.bll.ItemManager;
+import org.eni.encheres.bll.UserManager;
 import org.eni.encheres.bll.exception.BLLException;
 import org.eni.encheres.bo.Item;
 import org.eni.encheres.bo.ItemAllInformation;
 import org.eni.encheres.bo.User;
+import org.eni.encheres.helpers.Flash;
 
 
 @WebServlet("/detail-vente/*")
@@ -33,17 +35,22 @@ public class DetailItemServlet extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//		try {
+		try {
 			HttpSession session = request.getSession();
 			Integer offer = Integer.parseInt(request.getParameter("offer")) ;
 			User bidder = (User) session.getAttribute("user");
 			Integer noItemBidded = Integer.parseInt(request.getPathInfo().substring(1));
 			Item itemBidded = ItemManager.getInstance().selectItemById(noItemBidded);
 			AuctionManager.getInstance().placeABid(offer,bidder,itemBidded);
-//		} catch (BLLException e) {
-//			request.setAttribute("errors", e.getErreurs());
-//			doGet(request, response);
-//		}
+			
+			//session user à maj
+			Flash.send("success", "Votre enchère a bien été prise en compte ", request.getSession());
+			response.sendRedirect(request.getContextPath()+"/detail-vente/"+noItemBidded);
+
+		} catch (BLLException e) {
+			request.setAttribute("errors", e.getErreurs());
+			doGet(request, response);
+		}
 		
 		
 	}

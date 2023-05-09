@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import org.eni.encheres.bo.User;
+import org.eni.encheres.helpers.Flash;
 
 @WebFilter(
 		dispatcherTypes = DispatcherType.REQUEST,
@@ -20,7 +21,8 @@ import org.eni.encheres.bo.User;
 				"/deconnexion",
 				"/mon-profil",
 				"/nouvelle-vente",
-				"/modifier-profil"
+				"/modifier-profil",
+				"/detail-vente/*"
 		}
 		
 		)

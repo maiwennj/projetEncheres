@@ -33,9 +33,12 @@ Integer nbResults = itemsList.size() ;
 							<p class="card-text">Fin de l'enchère : <%=itemAllInfo.getItem().getEndDate() %></p>
 							<p class="card-text">Vendeur : <a href="<%=request.getContextPath()%>/profil/<%=itemAllInfo.getUser().getNoUser()%>"><%= itemAllInfo.getUser().getUsername() %></a></p>
 							</div>
-							<div class="card-body">
-							    <a href="<%=request.getContextPath()%>/detail-vente/<%=itemAllInfo.getItem().getNoItem()%>" class="card-link btn btn-success">Voir l'article</a>
-							</div>
+							<%if(session.getAttribute("user")!=null) {%>
+								<div class="card-body">
+								    <a href="<%=request.getContextPath()%>/detail-vente/<%=itemAllInfo.getItem().getNoItem()%>" class="card-link btn btn-success">Voir l'article</a>
+								</div>
+							<%} %>
+							
 							<% // gestion de l'antériorité du post %>
 							<div class="card-footer text-muted">
 								<% long daysBetween = ChronoUnit.DAYS.between(itemAllInfo.getItem().getStartDate(), LocalDateTime.now()); 

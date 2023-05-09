@@ -1,3 +1,4 @@
+<%@page import="org.eni.encheres.helpers.Flash"%>
 <%@page import="org.eni.encheres.bo.Item"%>
 <%@page import="org.eni.encheres.bo.ItemAllInformation"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -6,7 +7,8 @@
 <%
 	ItemAllInformation itemAllinfo = (ItemAllInformation) request.getAttribute("itemAllInfo");
 	Item itemDetails = itemAllinfo.getItem();
-	
+	List<String> errors = (List<String>) request.getAttribute("errors");
+	String info = Flash.getMessage("success", session);
 %>
 <!DOCTYPE html>
 <html>
@@ -24,6 +26,21 @@
 			</header>
 			<main>
 				<div class="container-fluid">
+						<%//----- if bid succes%>
+							<%if(info!=null){ %>
+								<div class="alert alert-success text-center mt-5">
+								<%= info %>
+								</div>
+							<%} %>
+						<%//------  if bid succes %>
+						
+						<%// --------- if errors -------------- %>
+						<% if( errors!=null ) for(String error : errors){ %>
+								<div class="alert alert-danger">
+									<%= error %>
+								</div>
+						<% } %>
+						<%// --------- if errors -------------- %>
 					<div class="text-center mt-5">
 						<h1>Détail vente</h1>
 					</div>
@@ -34,12 +51,10 @@
 						<div class="col-6">
 							<p><%= itemDetails.getItemTitle() %></p>
 							<div class="row">
-								<p>Description:</p>
-								<p><%= itemDetails.getDescription() %></p>
+								<p>Description: <%= itemDetails.getDescription() %></p>
 							</div>
 							<div class="row">
-								<p>Catégorie:</p>
-								<p><%= itemAllinfo.getCategory().getLibelle()%></p>
+								<p>Catégorie: <%= itemAllinfo.getCategory().getLibelle()%></p>
 							</div>
 							<div class="row">
 								<p>Meilleure offre:</p>
@@ -54,12 +69,10 @@
 								<%} %>
 							</div>
 							<div class="row">
-								<p>Mise à prix:</p>
-								<p><%= itemDetails.getInitialPrice()%> points</p>
+								<p>Mise à prix: <%= itemDetails.getInitialPrice()%> points</p>
 							</div>
 							<div class="row">
-								<p>Fin de l'enchère:</p>
-								<p><%= itemDetails.getEndDate()%></p>
+								<p>Fin de l'enchère: <%= itemDetails.getEndDate()%></p>
 							</div>
 							<div class="row">
 								<p>Retrait:</p>
@@ -67,8 +80,7 @@
 								<p><%= itemAllinfo.getCollectionPoint().getPostCodeCP() +" "+ itemAllinfo.getCollectionPoint().getCityCP()%></p>
 							</div>
 							<div class="row">
-								<p>Vendeur:</p>
-								<p><a href="<%=request.getContextPath()%>/profil/<%=itemAllinfo.getUser().getNoUser()%>"><%= itemAllinfo.getUser().getUsername()%></a></p>
+								<p>Vendeur: <a href="<%=request.getContextPath()%>/profil/<%=itemAllinfo.getUser().getNoUser()%>"><%= itemAllinfo.getUser().getUsername()%></a></p>
 							</div>
 							<form action="" method="post">
 								<label for="offer">Ma proposition:</label>

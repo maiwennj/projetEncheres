@@ -36,11 +36,10 @@ public class AuctionDaoImpl implements AuctionDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
 	}
 
 	@Override
-	public void placeABid(Integer offer, User bidder, Item itemBidded) {
+	public void placeABid(Integer offer, User bidder, Item itemBidded, Auction lastAuction) {
 
 		try(Connection cnx = ConnectionProvider.getConnection()){
 			cnx.setAutoCommit(false);
@@ -48,15 +47,18 @@ public class AuctionDaoImpl implements AuctionDao {
 				PreparedStatement updateBidder = cnx.prepareStatement(UPDATE_BIDDER);
 				cnx.setAutoCommit(false);
 				updateBidder.setInt(1, offer);
-					System.out.println("offer : " + offer);
+//					System.out.println("offer : " + offer);
 				updateBidder.setInt(2,bidder.getNoUser());
-					System.out.println(bidder.getNoUser());
+//					System.out.println(bidder.getNoUser());
 				updateBidder.executeUpdate();
 				
 				PreparedStatement updateLastBidder = cnx.prepareStatement(UPDATE_LAST_BIDDER);
-				updateLastBidder.setInt(1, selectAuctionById(itemBidded.getNoItem()).getBid());
-				updateLastBidder.setInt(2, selectAuctionById(itemBidded.getNoItem()).getUser().getNoUser());
-					System.out.println( "updateLastBidder nouser: "+selectAuctionById(itemBidded.getNoItem()).getUser().getNoUser());
+//				updateLastBidder.setInt(1, selectAuctionById(itemBidded.getNoItem()).getBid());
+//				updateLastBidder.setInt(2, selectAuctionById(itemBidded.getNoItem()).getUser().getNoUser());
+				updateLastBidder.setInt(1, lastAuction.getBid());
+				updateLastBidder.setInt(2, lastAuction.getUser().getNoUser());
+				
+//					System.out.println( "updateLastBidder nouser: "+lastAuction.getUser().getNoUser());
 				updateLastBidder.executeUpdate();
 				
 				PreparedStatement insertAuction = cnx.prepareStatement(INSERT_AUCTION, PreparedStatement.RETURN_GENERATED_KEYS);
@@ -64,20 +66,19 @@ public class AuctionDaoImpl implements AuctionDao {
 				insertAuction.setInt(2,itemBidded.getNoItem());
 				insertAuction.setTimestamp(3,Timestamp.valueOf(LocalDateTime.now()));
 				insertAuction.setInt(4,offer);
-					System.out.println("insertAuction :" +  itemBidded.getNoItem() +" , " + Timestamp.valueOf(LocalDateTime.now()) + " , "+  offer);
+//					System.out.println("insertAuction :" +  itemBidded.getNoItem() +" , " + Timestamp.valueOf(LocalDateTime.now()) + " , "+  offer);
 				insertAuction.executeUpdate();
-				cnx.commit();
-				
+				cnx.commit();	
 			} catch (Exception e) {
 				System.err.println("rollback");
 				e.printStackTrace();
 				cnx.rollback();
-				
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}	
 	}
+	
 	
 	public Auction selectAuctionById(Integer id) {
 		try(Connection cnx = ConnectionProvider.getConnection()){
@@ -91,6 +92,6 @@ public class AuctionDaoImpl implements AuctionDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}return null;
-		
 	}
+
 }
