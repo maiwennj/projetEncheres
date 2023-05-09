@@ -38,19 +38,23 @@
 							</div>
 							<div class="row">
 								<p>Catégorie:</p>
-								<p><%= itemDetails.getCategory().getLibelle()%></p>
+								<p><%= itemAllinfo.getCategory().getLibelle()%></p>
 							</div>
 							<div class="row">
 								<p>Meilleure offre:</p>
-								<p><%= itemAllinfo.getAuction().getBid()%> pts par 
-									<a href="<%=request.getContextPath()%>/detail/<%=itemAllinfo.getAuction().getUser().getNoUser()%>">
+								<%if(itemAllinfo.getAuction().getBid()!= null){ %>
+									<p><%=itemAllinfo.getAuction().getBid()%> pts par 
+									<a href="<%=request.getContextPath()%>/profil/<%=itemAllinfo.getAuction().getUser().getNoUser()%>">
 										<%=itemAllinfo.getAuction().getUser().getUsername()%>
 									</a>
 								</p>
+								<%}else{ %>
+								<p>pas d'offre en cours.</p> 
+								<%} %>
 							</div>
 							<div class="row">
 								<p>Mise à prix:</p>
-								<p><%= itemDetails.getSellingPrice()%> points</p>
+								<p><%= itemDetails.getInitialPrice()%> points</p>
 							</div>
 							<div class="row">
 								<p>Fin de l'enchère:</p>
@@ -58,15 +62,16 @@
 							</div>
 							<div class="row">
 								<p>Retrait:</p>
-<%-- 								<p><%= itemDetails.getCollectionPoint()%></p> --%>
+								<p><%= itemAllinfo.getCollectionPoint().getStreetCP()%></p>
+								<p><%= itemAllinfo.getCollectionPoint().getPostCodeCP() +" "+ itemAllinfo.getCollectionPoint().getCityCP()%></p>
 							</div>
 							<div class="row">
 								<p>Vendeur:</p>
-								<p><a href="<%=request.getContextPath()%>/detail/<%=itemDetails.getUser().getNoUser()%>"><%= itemDetails.getUser().getUsername()%></a></p>
+								<p><a href="<%=request.getContextPath()%>/profil/<%=itemAllinfo.getUser().getNoUser()%>"><%= itemAllinfo.getUser().getUsername()%></a></p>
 							</div>
 							<form action="" method="post">
 								<label for="offer">Ma proposition:</label>
-								<input type="number" value="<%= itemAllinfo.getAuction().getBid()+1%>">
+								<input type="number" value="<%= itemAllinfo.getAuction().getBid()==null?itemDetails.getInitialPrice()+1:itemAllinfo.getAuction().getBid()+1%>" min="<%= itemAllinfo.getAuction().getBid()==null?itemDetails.getInitialPrice()+1:itemAllinfo.getAuction().getBid()+1%>">
 								<button type="submit" class="btn btn-succes">Enchérir</button>
 							</form>
 							
