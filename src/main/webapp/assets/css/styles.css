@@ -26,14 +26,6 @@ main{
 	pointer-events:none !important;
 }
 
-
-
-
-
-
-
-
-
 .section{
   padding: 4rem 2rem;
   text-align: center;
@@ -77,4 +69,7 @@ main{
   color: #ddd;
 }
 
+input,textarea{
+	background-color: #f2f2f2 !important;
+}
 

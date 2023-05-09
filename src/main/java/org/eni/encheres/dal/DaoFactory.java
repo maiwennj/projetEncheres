@@ -3,6 +3,7 @@ package org.eni.encheres.dal;
 
 import org.eni.encheres.dal.jdbc.AuctionDaoImpl;
 import org.eni.encheres.dal.jdbc.CategoryDaoImpl;
+import org.eni.encheres.dal.jdbc.CollectionPointDaoImpl;
 import org.eni.encheres.dal.jdbc.ItemDaoImpl;
 import org.eni.encheres.dal.jdbc.UserDaoImpl;
 
@@ -22,6 +23,10 @@ public class DaoFactory {
 	
 	public static AuctionDao getAuctionDao() {
 		return new AuctionDaoImpl();
+	}
+
+	public static CollectionPointDao getCollectionPoint() {
+		return new CollectionPointDaoImpl();
 	}
 	
 

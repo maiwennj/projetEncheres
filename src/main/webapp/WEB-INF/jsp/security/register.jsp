@@ -33,12 +33,13 @@
 							<% } %>
 							<%// --------- field errors -------------- %>
 
+							<div class="page-header text-center mt-5">
+								<h1>Créer mon profil</h1>
+							</div>
+								
 							<form id="user-registration" action="" method="post"  class="form-validate form-horizontal well">
 								
 								<fieldset>
-									<div class="page-header text-center">
-										<h2>Créer mon profil</h2>
-									</div>
 									
 									<div class="form-group row">
 										<label class="col-sm-2 col-form-label " for="username">Pseudo: *</label>
