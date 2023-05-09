@@ -10,24 +10,76 @@ import java.util.List;
 
 import org.eni.encheres.bll.CategoryManager;
 import org.eni.encheres.bll.ItemManager;
-import org.eni.encheres.bll.UserManager;
-import org.eni.encheres.bll.exception.BLLException;
 import org.eni.encheres.bo.Category;
-import org.eni.encheres.bo.Item;
 import org.eni.encheres.bo.ItemAllInformation;
-import org.eni.encheres.bo.ItemsStates;
+import org.eni.encheres.bo.User;
 
 @WebServlet("/resultat-recherche")
 public class SearchResultServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;   
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// liste de résultats de recherche
-		String itemTitle= request.getParameter("item-title").trim();
+		//--------------------------  liste de résultats de recherche ---------------------------------
+		String itemTitle = request.getParameter("itemTitle").trim();
 		Integer idCategory= Integer.parseInt(request.getParameter("category"));
-		String itemState = ItemsStates.UNDERWAY.getState();
-		List<ItemAllInformation> itemsList = ItemManager.getInstance().searchItems(itemTitle,idCategory,itemState);
-		request.setAttribute("itemsList", itemsList);
+		Integer idUser=null;
+		if (request.getSession().getAttribute("user")!=null) {
+			User user = (User) request.getSession().getAttribute("user");			
+			idUser = user.getNoUser();
+			System.out.println(idUser);
+		}
+//		String itemState = ItemsStates.UNDERWAY.getState();
+//		List<ItemAllInformation> itemsList = ItemManager.getInstance().searchItems(itemTitle,idCategory,itemState);
+//		request.setAttribute("itemsList", itemsList);
+		
+		// booléens de la recherche connectée
+		Boolean auctionsIsChecked = false;
+		Boolean salesIsChecked = false;
+		Boolean currentAuctions = false;
+		Boolean myBids = false;
+		Boolean wonAuctions = false;
+		Boolean currentSales = false;
+		Boolean newSales = false;
+		Boolean finishedSales = false;
+		
+		if (request.getParameter("typeItem") !=null && request.getParameter("typeItem").equals("auctions")) {
+			auctionsIsChecked = true;
+			System.out.println("AUCTIONS CHECKED : auction = "+auctionsIsChecked+" sales = "+salesIsChecked);
+			if (request.getParameter("currentAuctions")!=null) {
+				currentAuctions = true;
+				System.out.println("Servlet : enchères en cours");
+			}
+			if (request.getParameter("myBids")!=null) {
+				myBids = true;
+				System.out.println("Servlet : mes enchères en cours");
+			}
+			if (request.getParameter("wonAuctions")!=null) {
+				wonAuctions = true;
+				System.out.println("Servlet : mes enchères remportées");
+			}
+			List<ItemAllInformation> auctionsList = ItemManager.getInstance().searchAuctions(currentAuctions,myBids,wonAuctions,itemTitle,idCategory,idUser);
+			request.setAttribute("itemsList", auctionsList);
+		}else if (request.getParameter("typeItem") !=null && request.getParameter("typeItem").equals("sales")) {
+			salesIsChecked = true;
+			System.out.println("SALES CHECKED : auction = "+auctionsIsChecked+" sales = "+salesIsChecked);
+			if (request.getParameter("currentSales")!=null) {
+				currentSales = true;
+				System.out.println("Servlet : ventes en cours");
+			}
+			if (request.getParameter("newSales")!=null) {
+				newSales = true;
+				System.out.println("Servlet : mes nouvelles ventes");
+			}
+			if (request.getParameter("finishedSales")!=null) {
+				finishedSales = true;
+				System.out.println("Servlet : mes ventes terminées");
+			}
+//			List<ItemAllInformation> listItems = ItemManager.getInstance().searchSales(currentSales,newSales,wonAuctions,finishedSales,idCategory);
+		}else {
+			currentAuctions = true;
+			List<ItemAllInformation> allItemsList = ItemManager.getInstance().searchAuctions(currentAuctions,myBids,wonAuctions,itemTitle,idCategory, idUser);
+			request.setAttribute("itemsList", allItemsList);
+		}
 		
 		//pour afficher la recherche au-dessus des résultats
 		request.setAttribute("category", CategoryManager.getInstance().selectOneCategory(idCategory));

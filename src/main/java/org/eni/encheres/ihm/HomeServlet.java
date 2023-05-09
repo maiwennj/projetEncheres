@@ -6,9 +6,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.eni.encheres.bll.CategoryManager;
@@ -23,7 +20,7 @@ public class HomeServlet extends HttpServlet {
        
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
-		List<ItemAllInformation> itemsList = ItemManager.getInstance().selectItemsByState(ItemsStates.UNDERWAY.getState());
+		List<ItemAllInformation> itemsList = ItemManager.getInstance().selectAllCurrentAuctions();
 		request.setAttribute("itemsList", itemsList);
 		List<Category> listCategories = CategoryManager.getInstance().selectAllCategories();
 		request.setAttribute("listCategories", listCategories);
