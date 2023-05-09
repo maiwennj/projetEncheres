@@ -67,7 +67,11 @@ public class ItemManager {
 		public List<ItemAllInformation> selectByTitleByCategory(String itemsState, String itemTitle, Integer category) {
 			return DaoFactory.getItemDao().selectByTitleByCategory(itemsState, itemTitle, category);
 		}
-
+		
+		public Item selectItemById(Integer id) {
+			return DaoFactory.getItemDao().selectItemById(id);
+		}
+		
 		public ItemAllInformation selectById(Integer id) {
 			return DaoFactory.getItemDao().selectById(id);}
 

@@ -13,4 +13,5 @@ public interface ItemDao {
 	List<ItemAllInformation> selectItemsByState (String itemsState);
 	ItemAllInformation selectById(Integer id);
 	Item insertItem(Item item);
+	Item selectItemById(Integer id);
 }

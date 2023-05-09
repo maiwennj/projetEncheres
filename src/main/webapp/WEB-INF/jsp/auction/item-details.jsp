@@ -6,6 +6,7 @@
 <%
 	ItemAllInformation itemAllinfo = (ItemAllInformation) request.getAttribute("itemAllInfo");
 	Item itemDetails = itemAllinfo.getItem();
+	
 %>
 <!DOCTYPE html>
 <html>
@@ -71,10 +72,9 @@
 							</div>
 							<form action="" method="post">
 								<label for="offer">Ma proposition:</label>
-								<input type="number" value="<%= itemAllinfo.getAuction().getBid()==null?itemDetails.getInitialPrice()+1:itemAllinfo.getAuction().getBid()+1%>" min="<%= itemAllinfo.getAuction().getBid()==null?itemDetails.getInitialPrice()+1:itemAllinfo.getAuction().getBid()+1%>">
+								<input name="offer" id="offer" type="number" value="<%= itemAllinfo.getAuction().getBid()==null?itemDetails.getInitialPrice():itemAllinfo.getAuction().getBid()%>" min="<%= itemAllinfo.getAuction().getBid()==null?itemDetails.getInitialPrice()+1:itemAllinfo.getAuction().getBid()+1%>">
 								<button type="submit" class="btn btn-succes">Enchérir</button>
 							</form>
-							
 						</div>
 						<div class="col">
 						</div>
