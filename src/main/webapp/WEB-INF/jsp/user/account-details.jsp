@@ -2,7 +2,8 @@
 <%@page import="org.eni.encheres.helpers.Flash"%>
 <%@page import="org.eni.encheres.bo.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"
+%>
 <%
 	User requestUser = (User) request.getAttribute("user"); 
 	User sessionUser = (User) session.getAttribute("user");

@@ -8,7 +8,8 @@
 <%@page import="org.eni.encheres.bo.Item"%>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"
+%>
 <%
 LocalDate.now();
 List <ItemAllInformation> itemsList = (List <ItemAllInformation>) request.getAttribute("itemsList");
@@ -30,10 +31,10 @@ Integer nbResults = itemsList.size() ;
 								<img src="assets/images-item/300x250.svg"/>
 								<p class="card-text">Prix : <%= ((itemAllInfo.getAuction().getBid())!=null?itemAllInfo.getAuction().getBid():itemAllInfo.getItem().getInitialPrice()) %></p>
 							<p class="card-text">Fin de l'enchère : <%=itemAllInfo.getItem().getEndDate() %></p>
-							<p class="card-text">Vendeur : <%= itemAllInfo.getUser().getUsername() %></p>
+							<p class="card-text">Vendeur : <a href="<%=request.getContextPath()%>/profil/<%=itemAllInfo.getUser().getNoUser()%>"><%= itemAllInfo.getUser().getUsername() %></a></p>
 							</div>
 							<div class="card-body">
-							    <a href="#" class="card-link btn btn-success">Voir l'article</a>
+							    <a href="<%=request.getContextPath()%>/detail-vente/<%=itemAllInfo.getItem().getNoItem()%>" class="card-link btn btn-success">Voir l'article</a>
 							</div>
 							<% // gestion de l'antériorité du post %>
 							<div class="card-footer text-muted">

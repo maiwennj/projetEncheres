@@ -30,9 +30,9 @@ public class UserManager {
 
 	
 	/**
-	 *  1. Vérifie si le compte existe(si existe pas, retourne une erreur)<br/>
-	 *  2. Vérifie si le mot de passe est valide ( si invalide, retourn une erreur <br/>
-	 *  3. Retourne user si tout est bon
+	 *  1. Vérifie si le compte existe(si il n'existe pas, retourne une erreur).<br/>
+	 *  2. Vérifie si le mot de passe est valide ( si non valide, retourne une erreur. <br/>
+	 *  3. Retourne user si tout est bon.
 	 *
 	 * @param username
 	 * @param password

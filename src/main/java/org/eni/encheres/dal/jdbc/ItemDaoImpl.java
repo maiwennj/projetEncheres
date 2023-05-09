@@ -28,7 +28,7 @@ public class ItemDaoImpl implements ItemDao {
 	final String SELECT_ITEMS_BY_STATE_BY_TITLE = SELECT_ITEMS_BY_STATE+" AND nom_article LIKE ?";
 	final String SELECT_ITEMS_BY_STATE_BY_CATEGORY = SELECT_ITEMS_BY_STATE+" AND no_categorie=?";
 	final String SELECT_ITEMS_BY_STATE_BY_TITLE_BY_CATEGORY = SELECT_ITEMS_BY_STATE_BY_TITLE+" AND no_categorie=?";
-
+	final String SELECT_BY_ID = "";
 	/**
 	 * Returns ItemAllInformation needed for the search results. It's created with 3 Objects (Item,User,Auction)
 	 */
@@ -106,7 +106,22 @@ public class ItemDaoImpl implements ItemDao {
 		return null;
 	}
 	
-
+	
+	@Override
+	public ItemAllInformation selectById(Integer id) {
+		try (Connection cnx = ConnectionProvider.getConnection()){
+			PreparedStatement pStmt = cnx.prepareStatement(SELECT_BY_ID);
+			pStmt.setInt(1,id);
+			ResultSet rs = pStmt.executeQuery();
+			if (rs.next()) {
+						System.out.println("impl "+mapItemAllInfo(rs));
+				return mapItemAllInfo(rs);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 	
 
 	
@@ -124,5 +139,7 @@ public class ItemDaoImpl implements ItemDao {
 	private Item mapItem (ResultSet rs) throws SQLException {
 		return new Item(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getTimestamp(4).toLocalDateTime(), rs.getTimestamp(5).toLocalDateTime(), rs.getInt(6));
 	}
+
+	
 
 }

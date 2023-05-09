@@ -11,4 +11,5 @@ public interface ItemDao {
 	List<ItemAllInformation> selectByTitle(String itemsState, String itemTitle);
 	List<ItemAllInformation> selectByTitleByCategory(String itemsState, String itemTitle,Integer category);
 	List<ItemAllInformation> selectItemsByState (String itemsState);
+	ItemAllInformation selectById(Integer id);
 }

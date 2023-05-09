@@ -70,6 +70,10 @@ public class ItemManager {
 		public List<ItemAllInformation> selectByTitleByCategory(String itemsState, String itemTitle, Integer category) {
 			return DaoFactory.getItemDao().selectByTitleByCategory(itemsState, itemTitle, category);
 		}
+
+		public ItemAllInformation selectById(Integer id) {
+			return DaoFactory.getItemDao().selectById(id);
+		}
 		
 		
 		
