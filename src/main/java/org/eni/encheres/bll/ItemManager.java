@@ -24,6 +24,7 @@ public class ItemManager {
 	//READ
 	
 		public List<ItemAllInformation> selectItemsByState (String itemState){
+			System.out.println("item manager");
 			return DaoFactory.getItemDao().selectItemsByState(itemState);
 		}
 
