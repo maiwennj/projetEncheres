@@ -17,6 +17,11 @@ public class Category {
 	public Category(Integer noCategory) {
 		this.noCategory = noCategory;
 	}
+
+
+	public Category(String libelle) {
+		this.libelle = libelle;
+	}
 	
 	
 }

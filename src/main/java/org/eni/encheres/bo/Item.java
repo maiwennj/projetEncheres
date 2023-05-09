@@ -62,6 +62,17 @@ public class Item {
 		this.initialPrice = initialPrice;
 	}
 
+	public Item(Integer noItem, String itemTitle, String description, LocalDateTime startDate, LocalDateTime endDate,
+			Integer initialPrice, String state) {
+		this.noItem = noItem;
+		this.itemTitle = itemTitle;
+		this.description = description;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.initialPrice = initialPrice;
+		this.state=state;
+	}
+
 
 	
 }
