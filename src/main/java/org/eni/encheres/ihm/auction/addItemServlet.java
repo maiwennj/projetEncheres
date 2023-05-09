@@ -27,8 +27,6 @@ import org.eni.encheres.bo.ItemsStates;
 import org.eni.encheres.bo.User;
 import org.eni.encheres.helpers.Flash;
 
-
-
 @WebServlet("/nouvelle-vente")
 public class AddItemServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -46,7 +44,6 @@ public class AddItemServlet extends HttpServlet {
 			String itemTitle = request.getParameter("itemTitle");
 			String description = request.getParameter("description");
 			Category category = CategoryManager.getInstance().selectOneCategory(Integer.parseInt(request.getParameter("category")));
-			System.out.println(category);
 			Integer initialPrice=Integer.parseInt(request.getParameter("initialPrice"));
 			LocalDateTime startDate =LocalDateTime.parse(request.getParameter("startDate"));
 			LocalDateTime endDate =LocalDateTime.parse(request.getParameter("endDate"));

@@ -22,14 +22,7 @@ public class HomeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-	    String nowDateTime = LocalDateTime.now().format(formatter);
-	    System.out.println(nowDateTime);
-	    nowDateTime.replace(" ", "T");
-		System.out.println(nowDateTime);
-		String inAWeekString = LocalDateTime.now().plusDays(7).format(formatter);
-		
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
 		List<ItemAllInformation> itemsList = ItemManager.getInstance().selectItemsByState(ItemsStates.UNDERWAY.getState());
 		request.setAttribute("itemsList", itemsList);
 		List<Category> listCategories = CategoryManager.getInstance().selectAllCategories();

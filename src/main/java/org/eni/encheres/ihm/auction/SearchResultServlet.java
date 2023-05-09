@@ -19,25 +19,18 @@ import org.eni.encheres.bo.ItemsStates;
 
 @WebServlet("/resultat-recherche")
 public class SearchResultServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
+	private static final long serialVersionUID = 1L;   
 
-//	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//		
-//	}
-
-	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// liste de résultats de recherche
 		String itemTitle= request.getParameter("item-title").trim();
 		Integer idCategory= Integer.parseInt(request.getParameter("category"));
 		String itemState = ItemsStates.UNDERWAY.getState();
 		List<ItemAllInformation> itemsList = ItemManager.getInstance().searchItems(itemTitle,idCategory,itemState);
-
 		request.setAttribute("itemsList", itemsList);
 		
 		//pour afficher la recherche au-dessus des résultats
-			request.setAttribute("category", CategoryManager.getInstance().selectOneCategory(idCategory));
+		request.setAttribute("category", CategoryManager.getInstance().selectOneCategory(idCategory));
 
 		// sert à afficher la liste des catégories dans la recherche
 		List<Category> listCategories = CategoryManager.getInstance().selectAllCategories();
