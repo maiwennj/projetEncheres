@@ -44,18 +44,14 @@ public class SearchResultServlet extends HttpServlet {
 		
 		if (request.getParameter("typeItem") !=null && request.getParameter("typeItem").equals("auctions")) {
 			auctionsIsChecked = true;
-			System.out.println("AUCTIONS CHECKED : auction = "+auctionsIsChecked+" sales = "+salesIsChecked);
 			if (request.getParameter("currentAuctions")!=null) {
 				currentAuctions = true;
-				System.out.println("Servlet : enchères en cours");
 			}
 			if (request.getParameter("myBids")!=null) {
 				myBids = true;
-				System.out.println("Servlet : mes enchères en cours");
 			}
 			if (request.getParameter("wonAuctions")!=null) {
 				wonAuctions = true;
-				System.out.println("Servlet : mes enchères remportées");
 			}
 			List<ItemAllInformation> auctionsList = ItemManager.getInstance().searchAuctions(currentAuctions,myBids,wonAuctions,itemTitle,idCategory,idUser);
 			request.setAttribute("itemsList", auctionsList);
@@ -74,7 +70,8 @@ public class SearchResultServlet extends HttpServlet {
 				finishedSales = true;
 				System.out.println("Servlet : mes ventes terminées");
 			}
-//			List<ItemAllInformation> listItems = ItemManager.getInstance().searchSales(currentSales,newSales,wonAuctions,finishedSales,idCategory);
+			List<ItemAllInformation> salesList = ItemManager.getInstance().searchSales(currentSales,newSales,finishedSales,itemTitle,idCategory,idUser);
+			request.setAttribute("itemsList", salesList);
 		}else {
 			currentAuctions = true;
 			List<ItemAllInformation> allItemsList = ItemManager.getInstance().searchAuctions(currentAuctions,myBids,wonAuctions,itemTitle,idCategory, idUser);

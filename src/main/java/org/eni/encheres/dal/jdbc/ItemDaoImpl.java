@@ -32,6 +32,8 @@ public class ItemDaoImpl implements ItemDao {
 //	final String SELECT_ITEMS_BY_STATE_BY_TITLE = SELECT_ITEMS_BY_STATE+" AND nom_article LIKE ?";
 //	final String SELECT_ITEMS_BY_STATE_BY_CATEGORY = SELECT_ITEMS_BY_STATE+" AND no_categorie=?";
 //	final String SELECT_ITEMS_BY_STATE_BY_TITLE_BY_CATEGORY = SELECT_ITEMS_BY_STATE_BY_TITLE+" AND no_categorie=?";
+	
+	//OK POUR MERGE
 	final String SELECT_BY_ID = "SELECT TOP (1) a.no_article, nom_article,description,libelle,date_debut_encheres,date_fin_encheres,prix_initial,a.etat_vente,r.rue,r.code_postal,r.ville,a.no_utilisateur as vendeur, "
 			+ "u.pseudo,e.no_utilisateur as acquereur,u2.pseudo,MAX(montant_enchere) as enchere_max "
 			+ "            FROM ARTICLES_VENDUS a "
@@ -48,7 +50,7 @@ public class ItemDaoImpl implements ItemDao {
 			+ "VALUES (?,?,?,?,?,?,?,?)";
 	
 	
-	
+	// ***********************************  AUCTIONS ************************************
 	// PARTS
 	final String PART_TITLE = " AND nom_article LIKE ?";
 	final String PART_CATEGORY = " AND no_categorie=?";
@@ -66,27 +68,38 @@ public class ItemDaoImpl implements ItemDao {
 			+ "	LEFT JOIN ENCHERES e ON a.no_article=e.no_article"
 			+ "	WHERE etat_vente IN ('A','T') and montant_enchere=prix_vente";
 	
-	// FINALES
+	// FINALES 
+	// enchères en cours
 	final String SELECT_CURRENT_AUCTIONS_BY_CAT = SELECT_ALL_CURRENT_AUCTIONS+PART_CATEGORY;
 	final String SELECT_CURRENT_AUCTIONS_BY_TITLE = SELECT_ALL_CURRENT_AUCTIONS+PART_TITLE;
 	final String SELECT_CURRENT_AUCTIONS_BY_TITLE_CAT = SELECT_ALL_CURRENT_AUCTIONS+PART_TITLE+PART_CATEGORY;
+	// mes enchères en cours
 	final String SELECT_MY_CURRENT_AUCTIONS = SELECT_ALL_CURRENT_AUCTIONS+PART_AUCTION_USER;
 	final String SELECT_MY_CURRENT_AUCTIONS_BY_TITLE_CAT = SELECT_CURRENT_AUCTIONS_BY_TITLE_CAT+PART_AUCTION_USER;
 	final String SELECT_MY_CURRENT_AUCTIONS_BY_TITLE = SELECT_CURRENT_AUCTIONS_BY_TITLE+PART_AUCTION_USER;
 	final String SELECT_MY_CURRENT_AUCTIONS_BY_CAT = SELECT_CURRENT_AUCTIONS_BY_CAT+PART_AUCTION_USER;
-	
+	// mes enchères remportées
 	final String SELECT_MY_WON_AUCTIONS = SELECT_FINISHED_AUCTIONS+PART_AUCTION_USER;
 	final String SELECT_MY_WON_AUCTIONS_BY_CAT = SELECT_FINISHED_AUCTIONS+PART_CATEGORY+PART_AUCTION_USER;
 	final String SELECT_MY_WON_AUCTIONS_BY_TITLE = SELECT_FINISHED_AUCTIONS+PART_TITLE+PART_AUCTION_USER;
 	final String SELECT_MY_WON_AUCTIONS_BY_TITLE_CAT = SELECT_FINISHED_AUCTIONS+PART_TITLE+PART_CATEGORY+PART_AUCTION_USER;
-	
-	
+	// mes enchères remportées + mes enchères en cours
+	final String SELECT_MY_WON_AUCTIONS_MY_BIDS = SELECT_MY_CURRENT_AUCTIONS+" UNION "+SELECT_MY_WON_AUCTIONS;
+	final String SELECT_MY_WON_AUCTIONS_MY_BIDS_BY_TITLE = SELECT_MY_CURRENT_AUCTIONS+PART_TITLE+" UNION "+SELECT_MY_WON_AUCTIONS+PART_TITLE;
+	final String SELECT_MY_WON_AUCTIONS_MY_BIDS_BY_CAT = SELECT_MY_CURRENT_AUCTIONS+PART_CATEGORY+" UNION "+SELECT_MY_WON_AUCTIONS+PART_CATEGORY;
+	final String SELECT_MY_WON_AUCTIONS_MY_BIDS_BY_TITLE_CAT = SELECT_MY_CURRENT_AUCTIONS+PART_TITLE+PART_CATEGORY+" UNION "+SELECT_MY_WON_AUCTIONS+PART_TITLE+PART_CATEGORY;
+	// mes enchères remportées + enchères en cours
+	final String SELECT_MY_WON_CURRENT_AUCTIONS = SELECT_MY_WON_AUCTIONS+" UNION "+SELECT_ALL_CURRENT_AUCTIONS;
+	final String SELECT_MY_WON_CURRENT_AUCTIONS_TITLE = SELECT_MY_WON_AUCTIONS+PART_TITLE+" UNION "+SELECT_ALL_CURRENT_AUCTIONS+PART_TITLE;
+	final String SELECT_MY_WON_CURRENT_AUCTIONS_CAT = SELECT_MY_WON_AUCTIONS+PART_CATEGORY+" UNION "+SELECT_ALL_CURRENT_AUCTIONS+PART_CATEGORY;
+	final String SELECT_MY_WON_CURRENT_AUCTIONS_TITLE_CAT = SELECT_MY_WON_AUCTIONS+PART_TITLE+PART_CATEGORY+" UNION "+SELECT_ALL_CURRENT_AUCTIONS+PART_TITLE+PART_CATEGORY;
+	// enchères en cours + mes enchères en cours + mes enchères remportées
+	final String SELECT_ALL_CHECKED_AUCTIONS = SELECT_ALL_CURRENT_AUCTIONS+" UNION "+SELECT_MY_WON_AUCTIONS;
+	final String SELECT_ALL_CHECKED_AUCTIONS_TITLE = SELECT_ALL_CURRENT_AUCTIONS+PART_TITLE+" UNION "+SELECT_MY_WON_AUCTIONS+PART_TITLE;
+	final String SELECT_ALL_CHECKED_AUCTIONS_CAT = SELECT_ALL_CURRENT_AUCTIONS+PART_CATEGORY+" UNION "+SELECT_MY_WON_AUCTIONS+PART_CATEGORY;
+	final String SELECT_ALL_CHECKED_AUCTIONS_TITLE_CAT = SELECT_ALL_CURRENT_AUCTIONS+PART_TITLE+PART_CATEGORY+" UNION "+SELECT_MY_WON_AUCTIONS+PART_TITLE+PART_CATEGORY;
 
-	
-	
-	
-	
-	
+
 	
 	
 	
@@ -367,6 +380,241 @@ public class ItemDaoImpl implements ItemDao {
 			PreparedStatement pStmt = cnx.prepareStatement(SELECT_MY_WON_AUCTIONS_BY_TITLE);
 			pStmt.setString(1, "%"+itemTitle+"%");
 			pStmt.setInt(2, idUser);
+			ResultSet rs = pStmt.executeQuery();
+			while (rs.next()) {
+				auctionsList.add(mapItemAllInfo3(rs));
+			}
+			return auctionsList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public List<ItemAllInformation> selectMyWonAuctionsMyBidsByTitleCat(String itemTitle, Integer idCategory,Integer idUser) {
+		List<ItemAllInformation> auctionsList = new ArrayList<>();
+		try (Connection cnx = ConnectionProvider.getConnection()){
+			PreparedStatement pStmt = cnx.prepareStatement(SELECT_MY_WON_AUCTIONS_MY_BIDS_BY_TITLE_CAT);
+			pStmt.setInt(1, idUser);
+			pStmt.setString(2, "%"+itemTitle+"%");
+			pStmt.setInt(3, idCategory);
+			pStmt.setInt(4, idUser);
+			pStmt.setString(5, "%"+itemTitle+"%");
+			pStmt.setInt(6, idCategory);
+			ResultSet rs = pStmt.executeQuery();
+			while (rs.next()) {
+				auctionsList.add(mapItemAllInfo3(rs));
+			}
+			return auctionsList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public List<ItemAllInformation> selectMyWonAuctionsMyBidsByTitle(String itemTitle, Integer idUser) {
+		List<ItemAllInformation> auctionsList = new ArrayList<>();
+		try (Connection cnx = ConnectionProvider.getConnection()){
+			PreparedStatement pStmt = cnx.prepareStatement(SELECT_MY_WON_AUCTIONS_MY_BIDS_BY_TITLE);
+			pStmt.setInt(1, idUser);
+			pStmt.setString(2, "%"+itemTitle+"%");
+			pStmt.setInt(3, idUser);
+			pStmt.setString(4, "%"+itemTitle+"%");
+			ResultSet rs = pStmt.executeQuery();
+			while (rs.next()) {
+				auctionsList.add(mapItemAllInfo3(rs));
+			}
+			return auctionsList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public List<ItemAllInformation> selectMyWonAuctionsMyBidsByCategory(Integer idCategory, Integer idUser) {
+		List<ItemAllInformation> auctionsList = new ArrayList<>();
+		try (Connection cnx = ConnectionProvider.getConnection()){
+			PreparedStatement pStmt = cnx.prepareStatement(SELECT_MY_WON_AUCTIONS_MY_BIDS_BY_CAT);
+			pStmt.setInt(1, idUser);
+			pStmt.setInt(2, idCategory);
+			pStmt.setInt(3, idUser);
+			pStmt.setInt(4, idCategory);
+			ResultSet rs = pStmt.executeQuery();
+			while (rs.next()) {
+				auctionsList.add(mapItemAllInfo3(rs));
+			}
+			return auctionsList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public List<ItemAllInformation> selectMyWonAuctionsMyBids(Integer idUser) {
+		List<ItemAllInformation> auctionsList = new ArrayList<>();
+		try (Connection cnx = ConnectionProvider.getConnection()){
+			PreparedStatement pStmt = cnx.prepareStatement(SELECT_MY_WON_AUCTIONS_MY_BIDS);
+			pStmt.setInt(1, idUser);
+			pStmt.setInt(2, idUser);
+			ResultSet rs = pStmt.executeQuery();
+			while (rs.next()) {
+				auctionsList.add(mapItemAllInfo3(rs));
+			}
+			return auctionsList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public List<ItemAllInformation> selectMyWonAuctionsCurrentAuctionsByTitleCat(Integer idUser, String itemTitle,Integer idCategory) {
+		List<ItemAllInformation> auctionsList = new ArrayList<>();
+		try (Connection cnx = ConnectionProvider.getConnection()){
+			PreparedStatement pStmt = cnx.prepareStatement(SELECT_MY_WON_CURRENT_AUCTIONS_TITLE_CAT);
+			pStmt.setInt(1, idUser);
+			pStmt.setString(2, "%"+itemTitle+"%");
+			pStmt.setInt(3, idCategory);
+			pStmt.setString(4, "%"+itemTitle+"%");
+			pStmt.setInt(5, idCategory);
+			ResultSet rs = pStmt.executeQuery();
+			while (rs.next()) {
+				auctionsList.add(mapItemAllInfo3(rs));
+			}
+			return auctionsList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public List<ItemAllInformation> selectMyWonAuctionsCurrentAuctionsByCategory(Integer idUser, Integer idCategory) {
+		List<ItemAllInformation> auctionsList = new ArrayList<>();
+		try (Connection cnx = ConnectionProvider.getConnection()){
+			PreparedStatement pStmt = cnx.prepareStatement(SELECT_MY_WON_CURRENT_AUCTIONS_CAT);
+			pStmt.setInt(1, idUser);
+			pStmt.setInt(2, idCategory);
+			pStmt.setInt(3, idCategory);
+			ResultSet rs = pStmt.executeQuery();
+			while (rs.next()) {
+				auctionsList.add(mapItemAllInfo3(rs));
+			}
+			return auctionsList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public List<ItemAllInformation> selectMyWonAuctionsCurrentAuctionsByTitle(Integer idUser, String itemTitle) {
+		List<ItemAllInformation> auctionsList = new ArrayList<>();
+		try (Connection cnx = ConnectionProvider.getConnection()){
+			PreparedStatement pStmt = cnx.prepareStatement(SELECT_MY_WON_CURRENT_AUCTIONS_TITLE);
+			pStmt.setInt(1, idUser);
+			pStmt.setString(2, "%"+itemTitle+"%");
+			pStmt.setString(3, "%"+itemTitle+"%");
+			ResultSet rs = pStmt.executeQuery();
+			while (rs.next()) {
+				auctionsList.add(mapItemAllInfo3(rs));
+			}
+			return auctionsList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public List<ItemAllInformation> selectMyWonAuctionsCurrentAuctions(Integer idUser) {
+		List<ItemAllInformation> auctionsList = new ArrayList<>();
+		try (Connection cnx = ConnectionProvider.getConnection()){
+			PreparedStatement pStmt = cnx.prepareStatement(SELECT_MY_WON_CURRENT_AUCTIONS);
+			pStmt.setInt(1, idUser);
+			ResultSet rs = pStmt.executeQuery();
+			while (rs.next()) {
+				auctionsList.add(mapItemAllInfo3(rs));
+			}
+			return auctionsList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public List<ItemAllInformation> selectAllCheckedAuctionsByCategory(Integer idCategory, Integer idUser) {
+		List<ItemAllInformation> auctionsList = new ArrayList<>();
+		try (Connection cnx = ConnectionProvider.getConnection()){
+			PreparedStatement pStmt = cnx.prepareStatement(SELECT_ALL_CHECKED_AUCTIONS_CAT);
+			System.out.println(SELECT_ALL_CHECKED_AUCTIONS_CAT);
+			pStmt.setInt(1, idCategory);
+			pStmt.setInt(2, idUser);
+			pStmt.setInt(3, idCategory);
+			ResultSet rs = pStmt.executeQuery();
+			while (rs.next()) {
+				auctionsList.add(mapItemAllInfo3(rs));
+			}
+			return auctionsList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public List<ItemAllInformation> selectAllCheckedAuctions(Integer idUser) {
+		List<ItemAllInformation> auctionsList = new ArrayList<>();
+		try (Connection cnx = ConnectionProvider.getConnection()){
+			PreparedStatement pStmt = cnx.prepareStatement(SELECT_ALL_CHECKED_AUCTIONS);
+			pStmt.setInt(1, idUser);
+			ResultSet rs = pStmt.executeQuery();
+			while (rs.next()) {
+				auctionsList.add(mapItemAllInfo3(rs));
+			}
+			return auctionsList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public List<ItemAllInformation> selectAllCheckedAuctionsByTitle(String itemTitle, Integer idUser) {
+		List<ItemAllInformation> auctionsList = new ArrayList<>();
+		try (Connection cnx = ConnectionProvider.getConnection()){
+			PreparedStatement pStmt = cnx.prepareStatement(SELECT_ALL_CHECKED_AUCTIONS_TITLE);
+			System.out.println(SELECT_ALL_CHECKED_AUCTIONS_TITLE);
+			pStmt.setString(1,"%"+itemTitle+"%");
+			pStmt.setInt(2, idUser);
+			pStmt.setString(3,"%"+itemTitle+"%");
+			ResultSet rs = pStmt.executeQuery();
+			while (rs.next()) {
+				auctionsList.add(mapItemAllInfo3(rs));
+			}
+			return auctionsList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public List<ItemAllInformation> selectAllCheckedAuctionsByTitleCat(String itemTitle, Integer idCategory,Integer idUser) {
+		List<ItemAllInformation> auctionsList = new ArrayList<>();
+		try (Connection cnx = ConnectionProvider.getConnection()){
+			PreparedStatement pStmt = cnx.prepareStatement(SELECT_ALL_CHECKED_AUCTIONS_TITLE_CAT);
+			System.out.println(SELECT_ALL_CHECKED_AUCTIONS_TITLE_CAT);
+			pStmt.setString(1,"%"+itemTitle+"%");
+			pStmt.setInt(2, idCategory);
+			pStmt.setInt(3, idUser);
+			pStmt.setString(4,"%"+itemTitle+"%");
+			pStmt.setInt(5, idCategory);
 			ResultSet rs = pStmt.executeQuery();
 			while (rs.next()) {
 				auctionsList.add(mapItemAllInfo3(rs));

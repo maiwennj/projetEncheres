@@ -28,4 +28,21 @@ public interface ItemDao {
 	List<ItemAllInformation> selectMyWonAuctionsByCategory(Integer idCategory, Integer idUser);
 	List<ItemAllInformation> selectMyWonAuctionsByTitleCat(String itemTitle, Integer idCategory, Integer idUser);
 	List<ItemAllInformation> selectMyWonAuctionsByTitle(String itemTitle, Integer idUser);
+	
+	// MES ENCHERES REMPORTEES + MES ENCHERES EN COURS : 2+3
+	List<ItemAllInformation> selectMyWonAuctionsMyBidsByTitleCat(String itemTitle, Integer idCategory, Integer idUser);
+	List<ItemAllInformation> selectMyWonAuctionsMyBidsByTitle(String itemTitle, Integer idUser);
+	List<ItemAllInformation> selectMyWonAuctionsMyBidsByCategory(Integer idCategory, Integer idUser);
+	List<ItemAllInformation> selectMyWonAuctionsMyBids(Integer idUser);
+	
+	// MES ENCHERES REMPORTEES + ENCHERES EN COURS : 1+3
+	List<ItemAllInformation> selectMyWonAuctionsCurrentAuctionsByTitleCat(Integer idUser, String itemTitle,Integer idCategory);
+	List<ItemAllInformation> selectMyWonAuctionsCurrentAuctionsByCategory(Integer idUser, Integer idCategory);
+	List<ItemAllInformation> selectMyWonAuctionsCurrentAuctionsByTitle(Integer idUser, String itemTitle);
+	List<ItemAllInformation> selectMyWonAuctionsCurrentAuctions(Integer idUser);
+	// MES ENCHERES REMPORTEES + ENCHERES EN COURS + MES ENCHERES EN COURS : 1+2+3
+	List<ItemAllInformation> selectAllCheckedAuctionsByCategory(Integer idCategory, Integer idUser);
+	List<ItemAllInformation> selectAllCheckedAuctions(Integer idUser);
+	List<ItemAllInformation> selectAllCheckedAuctionsByTitle(String itemTitle, Integer idUser);
+	List<ItemAllInformation> selectAllCheckedAuctionsByTitleCat(String itemTitle, Integer idCategory, Integer idUser);
 }
