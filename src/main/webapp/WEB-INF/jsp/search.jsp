@@ -13,6 +13,9 @@ String libelleCategory = searchedCategory.getLibelle();
 		<title>Recherche</title>
 		<link rel="stylesheet" type="text/css" href="assets/css/materia.css">
 		<link rel="stylesheet" href="assets/css/styles.css"/>
+
+			
+			
 	</head>
 	<body>
 		<div class="container-fluid">
@@ -39,5 +42,31 @@ String libelleCategory = searchedCategory.getLibelle();
 				<%@include file="/WEB-INF/jsp/parts/footer.jspf" %>
 			</footer>
 		</div>
+	<script>
+		    function change(e){
+		        if(e.target.value==="sales"){ 
+		            disable(".auctions input[type=checkbox]");
+		        }else{
+		            disable(".sales input[type=checkbox]");
+		        }
+		        var parent = e.target.parentNode;
+		        enable(parent);
+		    }
+		    
+		    function disable(selector){
+		        var listeChecks = document.querySelectorAll(selector);
+		            listeChecks.forEach((value,index,array)=>{
+		                value.disabled= true;
+		                value.checked= false;
+		        });     
+		    }
+		    
+		    function enable(node){
+		        var listeChecks = node.querySelectorAll("input[type=checkbox]");
+		        listeChecks.forEach((value,index,array)=>{
+		            value.disabled= false;          
+		        }); 
+		    }
+	</script>
 	</body>
 </html>

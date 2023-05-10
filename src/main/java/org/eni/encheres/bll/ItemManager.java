@@ -1,7 +1,6 @@
 package org.eni.encheres.bll;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eni.encheres.bll.exception.BLLException;
@@ -159,28 +158,146 @@ public class ItemManager {
 		return null;
 	}
 	
-//	public List<ItemAllInformation> searchSales(Boolean currentSales, Boolean newSales, Boolean finishedSales,String itemTitle, Integer idCategory, Integer idUser) {
-//		// ----------------------- checked : (enchères ouvertes) OU (enchères ouvertes + mes enchères) --------------------------------
-//				if (currentSales && !newSales && !finishedSales) {
-//					// TITLE IS EMPTY
-//					if (itemTitle.isBlank() || itemTitle.isEmpty()) {
-//						if (idCategory==0) {
-//							// CATEGORY IS EMPTY TOO --> SELECT ALL, MY FRIEND
-//							return DaoFactory.getItemDao().selectAllCurrentSales();
-//						}else {
-//							// CATEGORY ISN'T NULL SO YOU SELECT ALL WITH A CATEGORY
-//							return DaoFactory.getItemDao().selectCurrentAuctionsByCategory(idCategory);
-//						}
-//					}else { // is itemTitle blank or empty : NO
-//						if (idCategory==0) {
-//							return DaoFactory.getItemDao().selectCurrentAuctionsByTitle(itemTitle);
-//						}else {
-//							return DaoFactory.getItemDao().selectCurrentAuctionsByTitleCat(itemTitle,idCategory);
-//						}
-//					}
-//		return null;
-//	}
 	
+	public List<ItemAllInformation> searchSales(Boolean currentSales, Boolean newSales, Boolean finishedSales,String itemTitle, Integer idCategory, Integer idUser) {
+		// ----------------------- checked : ventes en cours	 --------------------------------
+		if (currentSales && !newSales && !finishedSales) {
+			// TITLE IS EMPTY
+			if (itemTitle.isBlank() || itemTitle.isEmpty()) {
+				if (idCategory==0) {
+					// CATEGORY IS EMPTY TOO --> SELECT ALL, MY FRIEND
+					return DaoFactory.getItemDao().selectAllCurrentSales(idUser);
+				}else {
+					// CATEGORY ISN'T NULL SO YOU SELECT ALL WITH A CATEGORY
+					return DaoFactory.getItemDao().selectAllCurrentSalesByCat(idUser,idCategory);
+				}
+			}else { // is itemTitle blank or empty : NO
+				if (idCategory==0) {
+					return DaoFactory.getItemDao().selectAllCurrentSalesByTitle(idUser,itemTitle);
+				}else {
+					return DaoFactory.getItemDao().selectAllCurrentSalesByTitleCat(idUser,itemTitle,idCategory);
+				}
+			}
+		}
+		// ----------------------- checked : ventes non débutées) --------------------------------
+		if (!currentSales && newSales && !finishedSales) {
+			// TITLE IS EMPTY
+			if (itemTitle.isBlank() || itemTitle.isEmpty()) {
+				if (idCategory==0) {
+					// CATEGORY IS EMPTY TOO --> SELECT ALL, MY FRIEND
+					return DaoFactory.getItemDao().selectNewSales(idUser);
+				}else {
+					// CATEGORY ISN'T NULL SO YOU SELECT ALL WITH A CATEGORY
+					return DaoFactory.getItemDao().selectNewSalesByCat(idUser,idCategory);
+				}
+			}else { // is itemTitle blank or empty : NO
+				if (idCategory==0) {
+					return DaoFactory.getItemDao().selectNewSalesByTitle(idUser,itemTitle);
+				}else {
+					return DaoFactory.getItemDao().selectNewSalesByTitleCat(idUser,itemTitle,idCategory);
+				}
+			}
+		}
+		// ----------------------- checked : (ventes terminées --------------------------------
+		if (!currentSales && !newSales && finishedSales) {
+			// TITLE IS EMPTY
+			if (itemTitle.isBlank() || itemTitle.isEmpty()) {
+				if (idCategory==0) {
+					// CATEGORY IS EMPTY TOO --> SELECT ALL, MY FRIEND
+					return DaoFactory.getItemDao().selectFinishedSales(idUser);
+				}else {
+					// CATEGORY ISN'T NULL SO YOU SELECT ALL WITH A CATEGORY
+					return DaoFactory.getItemDao().selectFinishedSalesByCat(idUser,idCategory);
+				}
+			}else { // is itemTitle blank or empty : NO
+				if (idCategory==0) {
+					return DaoFactory.getItemDao().selectFinishedSalesByTitle(idUser,itemTitle);
+				}else {
+					return DaoFactory.getItemDao().selectFinishedSalesByTitleCat(idUser,itemTitle,idCategory);
+				}
+			}
+		}
+		// ----------------------- checked : ventes nouvelles + ventes en cours --------------------------------
+		if (currentSales && newSales && !finishedSales) {
+			// TITLE IS EMPTY
+			if (itemTitle.isBlank() || itemTitle.isEmpty()) {
+				if (idCategory==0) {
+					// CATEGORY IS EMPTY TOO --> SELECT ALL, MY FRIEND
+					return DaoFactory.getItemDao().selectCurrentNewSales(idUser);
+				}else {
+					// CATEGORY ISN'T NULL SO YOU SELECT ALL WITH A CATEGORY
+					return DaoFactory.getItemDao().selectCurrentNewSalesByCat(idUser,idCategory);
+				}
+			}else { // is itemTitle blank or empty : NO
+				if (idCategory==0) {
+					return DaoFactory.getItemDao().selectCurrentNewSalesByTitle(idUser,itemTitle);
+				}else {
+					return DaoFactory.getItemDao().selectCurrentNewSalesByTitleCat(idUser,itemTitle,idCategory);
+				}
+			}
+		}
+		// ----------------------- checked : ventes en cours + ventes terminées --------------------------------
+		if (currentSales && !newSales && finishedSales) {
+			// TITLE IS EMPTY
+			if (itemTitle.isBlank() || itemTitle.isEmpty()) {
+				if (idCategory==0) {
+					// CATEGORY IS EMPTY TOO --> SELECT ALL, MY FRIEND
+					return DaoFactory.getItemDao().selectCurrentFinishedSales(idUser);
+				}else {
+					// CATEGORY ISN'T NULL SO YOU SELECT ALL WITH A CATEGORY
+					return DaoFactory.getItemDao().selectCurrentFinishedSalesByCat(idUser,idCategory);
+				}
+			}else { // is itemTitle blank or empty : NO
+				if (idCategory==0) {
+					return DaoFactory.getItemDao().selectCurrentFinishedSalesByTitle(idUser,itemTitle);
+				}else {
+					return DaoFactory.getItemDao().selectCurrentFinishedSalesByTitleCat(idUser,itemTitle,idCategory);
+				}
+			}
+		}
+		// ----------------------- checked : ventes nouvelles + ventes terminées  --------------------------------
+		if (!currentSales && newSales && finishedSales) {
+			// TITLE IS EMPTY
+			if (itemTitle.isBlank() || itemTitle.isEmpty()) {
+				if (idCategory==0) {
+					// CATEGORY IS EMPTY TOO --> SELECT ALL, MY FRIEND
+					return DaoFactory.getItemDao().selectNewFinishedSales(idUser);
+				}else {
+					// CATEGORY ISN'T NULL SO YOU SELECT ALL WITH A CATEGORY
+					return DaoFactory.getItemDao().selectNewFinishedSalesSalesByCat(idUser,idCategory);
+				}
+			}else { // is itemTitle blank or empty : NO
+				if (idCategory==0) {
+					return DaoFactory.getItemDao().selectNewFinishedSalesSalesByTitle(idUser,itemTitle);
+				}else {
+					return DaoFactory.getItemDao().selectNewFinishedSalesSalesByTitleCat(idUser,itemTitle,idCategory);
+				}
+			}
+		}
+		// ----------------------- checked : ventes nouvelles + ventes terminées + ventes en cours --------------------------------
+		if (currentSales && newSales && finishedSales) {
+			// TITLE IS EMPTY
+			if (itemTitle.isBlank() || itemTitle.isEmpty()) {
+				if (idCategory==0) {
+					// CATEGORY IS EMPTY TOO --> SELECT ALL, MY FRIEND
+					return DaoFactory.getItemDao().selectAllCheckedSales(idUser);
+				}else {
+					// CATEGORY ISN'T NULL SO YOU SELECT ALL WITH A CATEGORY
+					return DaoFactory.getItemDao().selectAllCheckedSalesByCat(idUser,idCategory);
+				}
+			}else { // is itemTitle blank or empty : NO
+				if (idCategory==0) {
+					return DaoFactory.getItemDao().selectAllCheckedSalesByTitle(idUser,itemTitle);
+				}else {
+					return DaoFactory.getItemDao().selectAllCheckedSalesByTitleCat(idUser,itemTitle,idCategory);
+				}
+			}
+		}
+		
+		
+		
+		return null;
+	}	
 	
 	
 

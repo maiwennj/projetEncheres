@@ -24,8 +24,8 @@
         <% if (userConnected!=null){ %>
         <div id="connected-filters">
         	<fieldset class="form-group">
-				<div class="form-check">
-			        <input class="form-check-input" type="radio" name="typeItem" id="auctions" value="auctions" checked>
+				<div class="form-check auctions">
+			        <input class="form-check-input" type="radio" name="typeItem" id="auctions" value="auctions" onchange="change(event);" checked>
 			        <label class="form-check-label" for="auctions">Achats</label>
 			        <ul>
 			        	<li>
@@ -46,28 +46,27 @@
 								<label class="form-check-label" for="wonAuctions">mes enchères remportées</label>
 							 </div>
 						</li>
-			        
 			        </ul>
 				</div>		      
-				<div class="form-check">
-			        <input class="form-check-input" type="radio" name="typeItem" id="sales" value="sales">
+				<div class="form-check sales">
+			        <input class="form-check-input" type="radio" name="typeItem" id="sales" value="sales" onchange="change(event);">
 			        <label class="form-check-label" for="sales">Mes ventes</label>
 			        <ul>
 			        	<li>
 			        		<div class="form-check">
-								<input class="form-check-input" type="checkbox" name="currentSales" id="currentSales">
+								<input class="form-check-input" type="checkbox" name="currentSales" id="currentSales" disabled >
 								<label class="form-check-label" for="currentSales">mes ventes en cours</label>
 							 </div>
 						</li>
 			        	<li>
 			        		<div class="form-check">
-								<input class="form-check-input" type="checkbox" id="newSales" name="newSales">
+								<input class="form-check-input" type="checkbox" id="newSales" name="newSales" disabled >
 								<label class="form-check-label" for="newSales">ventes non débutées</label>
 							 </div>
 						</li>
 			        	<li>
 			        		<div class="form-check">
-								<input class="form-check-input" type="checkbox" name="finishedSales" id="finishedSales">
+								<input class="form-check-input" type="checkbox" name="finishedSales" id="finishedSales" disabled >
 								<label class="form-check-label" for="finishedSales">ventes terminées</label>
 							 </div>
 						</li>

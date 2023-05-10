@@ -26,7 +26,6 @@ public class SearchResultServlet extends HttpServlet {
 		if (request.getSession().getAttribute("user")!=null) {
 			User user = (User) request.getSession().getAttribute("user");			
 			idUser = user.getNoUser();
-			System.out.println(idUser);
 		}
 //		String itemState = ItemsStates.UNDERWAY.getState();
 //		List<ItemAllInformation> itemsList = ItemManager.getInstance().searchItems(itemTitle,idCategory,itemState);
@@ -70,8 +69,8 @@ public class SearchResultServlet extends HttpServlet {
 				finishedSales = true;
 				System.out.println("Servlet : mes ventes terminées");
 			}
-//			List<ItemAllInformation> salesList = ItemManager.getInstance().searchSales(currentSales,newSales,finishedSales,itemTitle,idCategory,idUser);
-//			request.setAttribute("itemsList", salesList);
+			List<ItemAllInformation> salesList = ItemManager.getInstance().searchSales(currentSales,newSales,finishedSales,itemTitle,idCategory,idUser);
+			request.setAttribute("itemsList", salesList);
 		}else {
 			currentAuctions = true;
 			List<ItemAllInformation> allItemsList = ItemManager.getInstance().searchAuctions(currentAuctions,myBids,wonAuctions,itemTitle,idCategory, idUser);
