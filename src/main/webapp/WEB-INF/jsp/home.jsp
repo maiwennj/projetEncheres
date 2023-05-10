@@ -12,6 +12,7 @@
 <%
 	User user = (User)session.getAttribute("user");
 	String info = Flash.getMessage("success", session);
+	
 %>
 
 <!DOCTYPE html>

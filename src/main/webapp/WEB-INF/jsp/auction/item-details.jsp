@@ -5,7 +5,10 @@
     pageEncoding="UTF-8"
 %>
 <%
+	//User user = (User)session.getAttribute("user");
+	
 	ItemAllInformation itemAllinfo = (ItemAllInformation) request.getAttribute("itemAllInfo");
+	Boolean lastAuction = itemAllinfo.getAuction().getBid()!= null?true:false;
 	Item itemDetails = itemAllinfo.getItem();
 	List<String> errors = (List<String>) request.getAttribute("errors");
 	String info = Flash.getMessage("success", session);
@@ -36,7 +39,7 @@
 						
 						<%// --------- if errors -------------- %>
 						<% if( errors!=null ) for(String error : errors){ %>
-								<div class="alert alert-danger">
+								<div class="alert alert-danger text-center mt-5">
 									<%= error %>
 								</div>
 						<% } %>
@@ -58,7 +61,7 @@
 							</div>
 							<div class="row">
 								<p>Meilleure offre:</p>
-								<%if(itemAllinfo.getAuction().getBid()!= null){ %>
+								<%if(lastAuction){ %>
 									<p><%=itemAllinfo.getAuction().getBid()%> pts par 
 									<a href="<%=request.getContextPath()%>/profil/<%=itemAllinfo.getAuction().getUser().getNoUser()%>">
 										<%=itemAllinfo.getAuction().getUser().getUsername()%>
@@ -84,8 +87,10 @@
 							</div>
 							<form action="" method="post">
 								<label for="offer">Ma proposition:</label>
-								<input name="offer" id="offer" type="number" value="<%= itemAllinfo.getAuction().getBid()==null?itemDetails.getInitialPrice():itemAllinfo.getAuction().getBid()%>" min="<%= itemAllinfo.getAuction().getBid()==null?itemDetails.getInitialPrice()+1:itemAllinfo.getAuction().getBid()+1%>">
-								<button type="submit" class="btn btn-succes">Enchérir</button>
+								<input  name="offer" id="offer" type="number" value="<%= itemAllinfo.getAuction().getBid()==null?itemDetails.getInitialPrice():itemAllinfo.getAuction().getBid()%>" min="<%= itemAllinfo.getAuction().getBid()==null?itemDetails.getInitialPrice()+1:itemAllinfo.getAuction().getBid()+1%>">
+								<button type="submit" class="btn btn-succes ">Enchérir</button>
+<%-- 								<input <%if(user.getNoUser()== itemAllinfo.getAuction().getUser().getNoUser()){%> disabled=""<%} %> name="offer" id="offer" type="number" value="<%= itemAllinfo.getAuction().getBid()==null?itemDetails.getInitialPrice():itemAllinfo.getAuction().getBid()%>" min="<%= itemAllinfo.getAuction().getBid()==null?itemDetails.getInitialPrice()+1:itemAllinfo.getAuction().getBid()+1%>"> --%>
+<%-- 								<button type="submit" class="btn btn-succes <%=user.getNoUser()== itemAllinfo.getAuction().getUser().getNoUser()?"disabled":""%> ">Enchérir</button> --%>
 							</form>
 						</div>
 						<div class="col">

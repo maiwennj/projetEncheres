@@ -42,10 +42,10 @@ public class DetailItemServlet extends HttpServlet {
 			Integer noItemBidded = Integer.parseInt(request.getPathInfo().substring(1));
 			Item itemBidded = ItemManager.getInstance().selectItemById(noItemBidded);
 			AuctionManager.getInstance().placeABid(offer,bidder,itemBidded);
-			
-			//session user à maj
+
+			bidder.setCredit(bidder.getCredit()-offer);
 			Flash.send("success", "Votre enchère a bien été prise en compte ", request.getSession());
-			response.sendRedirect(request.getContextPath()+"/detail-vente/"+noItemBidded);
+			response.sendRedirect(request.getContextPath()+"/detail-vente/" + noItemBidded);
 
 		} catch (BLLException e) {
 			request.setAttribute("errors", e.getErreurs());

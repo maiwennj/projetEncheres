@@ -52,14 +52,15 @@ public class AuctionDaoImpl implements AuctionDao {
 //					System.out.println(bidder.getNoUser());
 				updateBidder.executeUpdate();
 				
-				PreparedStatement updateLastBidder = cnx.prepareStatement(UPDATE_LAST_BIDDER);
-//				updateLastBidder.setInt(1, selectAuctionById(itemBidded.getNoItem()).getBid());
-//				updateLastBidder.setInt(2, selectAuctionById(itemBidded.getNoItem()).getUser().getNoUser());
-				updateLastBidder.setInt(1, lastAuction.getBid());
-				updateLastBidder.setInt(2, lastAuction.getUser().getNoUser());
-				
-//					System.out.println( "updateLastBidder nouser: "+lastAuction.getUser().getNoUser());
-				updateLastBidder.executeUpdate();
+				if (lastAuction.getBid()!=null) {
+					PreparedStatement updateLastBidder = cnx.prepareStatement(UPDATE_LAST_BIDDER);
+//					updateLastBidder.setInt(1, selectAuctionById(itemBidded.getNoItem()).getBid());
+//					updateLastBidder.setInt(2, selectAuctionById(itemBidded.getNoItem()).getUser().getNoUser());
+					updateLastBidder.setInt(1, lastAuction.getBid());
+					updateLastBidder.setInt(2, lastAuction.getUser().getNoUser());
+//						System.out.println( "updateLastBidder nouser: "+lastAuction.getUser().getNoUser());
+					updateLastBidder.executeUpdate();
+				}
 				
 				PreparedStatement insertAuction = cnx.prepareStatement(INSERT_AUCTION, PreparedStatement.RETURN_GENERATED_KEYS);
 				insertAuction.setInt(1,bidder.getNoUser());
