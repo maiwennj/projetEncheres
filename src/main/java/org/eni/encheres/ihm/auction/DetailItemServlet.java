@@ -29,9 +29,14 @@ public class DetailItemServlet extends HttpServlet {
 		Integer id = Integer.parseInt(params.substring(1));
 		ItemAllInformation itemAllInfo = ItemManager.getInstance().selectById(id);
 		request.setAttribute("itemAllInfo", itemAllInfo);
-			
-		request.getRequestDispatcher("/WEB-INF/jsp/auction/item-details.jsp")
-		.forward(request, response);
+		if (itemAllInfo.getItem().getState().equals("N")) {
+			System.out.println("detai item servle :" + itemAllInfo);
+			request.getRequestDispatcher("/WEB-INF/jsp/user/updateItem.jsp")
+			.forward(request, response);
+		}else {
+			request.getRequestDispatcher("/WEB-INF/jsp/auction/item-details.jsp")
+			.forward(request, response);
+		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
