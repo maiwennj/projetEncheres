@@ -24,13 +24,21 @@ public class ItemManager {
 	}
 	
 	// READ
+	
+	/**
+	 * Used directly on the home page, hence the "public" visibility
+	 * @return List<ItemAllInformation> 
+	 */
+	public List<ItemAllInformation> selectAllCurrentAuctions() {
+		return DaoFactory.getItemDao().selectAllCurrentAuctions();
+	}
 
 	/**
-	 * Génère le résultat des recherches effectuées dans les cadres de recherche. 
-	 * Cette fonction vérifie :<br/>
-	 * 1 : ce que l'utilisateur a coché comme cases ou non.<br/>
-	 * 2 : si les deux paramètres itemTitle et category sont remplis<br/>
-	 * puis redirige vers la méthode la plus adaptée.<br/>
+	 * Generates search results. 
+	 * this methods checks :<br/>
+	 * 1 : what boxes the user checked<br/>
+	 * 2 : if itemTitle and category have been filled.<br/>
+	 * and finally sends the informations to the most-suited method for the execution.<br/>
 	 * @param category 
 	 * @param itemTitle 
 	 * @param idUser 
@@ -150,127 +158,35 @@ public class ItemManager {
 		return null;
 	}
 	
-	public List<ItemAllInformation> searchSales(Boolean currentSales, Boolean newSales, Boolean finishedSales,String itemTitle, Integer idCategory, Integer idUser) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-//	private List<ItemAllInformation> selectAllCheckedAuctionsByTitleCat(String itemTitle, Integer idCategory,Integer idUser) {
-//		return DaoFactory.getItemDao().selectAllCheckedAuctionsByTitleCat(itemTitle,idCategory,idUser);
-//	}
-
-//	private List<ItemAllInformation> selectAllCheckedAuctionsByTitle(String itemTitle, Integer idUser) {
-//		return DaoFactory.getItemDao().selectAllCheckedAuctionsByTitle(itemTitle,idUser);
-//	}
-
-//	private List<ItemAllInformation> selectAllCheckedAuctionsByCategory(Integer idCategory, Integer idUser) {
-//		return DaoFactory.getItemDao().selectAllCheckedAuctionsByCategory(idCategory,idUser);
-//	}
-
-//	private List<ItemAllInformation> selectAllCheckedAuctions(Integer idUser) {
-//		return DaoFactory.getItemDao().selectAllCheckedAuctions(idUser);
-//	}
-
-//	private List<ItemAllInformation> selectMyWonAuctionsCurrentAuctionsByTitleCat(String itemTitle, Integer idCategory,Integer idUser) {
-//		return DaoFactory.getItemDao().selectMyWonAuctionsCurrentAuctionsByTitleCat(idUser,itemTitle,idCategory);
-//	}
-
-//	private List<ItemAllInformation> selectMyWonAuctionsCurrentAuctionsByTitle(String itemTitle, Integer idUser) {
-//		return DaoFactory.getItemDao().selectMyWonAuctionsCurrentAuctionsByTitle(idUser,itemTitle);
-//	}
-
-//	private List<ItemAllInformation> selectMyWonAuctionsCurrentAuctionsByCategory(Integer idCategory, Integer idUser) {
-//		return DaoFactory.getItemDao().selectMyWonAuctionsCurrentAuctionsByCategory(idUser,idCategory);
-//	}
-
-//	private List<ItemAllInformation> selectMyWonAuctionsCurrentAuctions(Integer idUser) {
-//		return DaoFactory.getItemDao().selectMyWonAuctionsCurrentAuctions(idUser);
-//	}
-
-//	private List<ItemAllInformation> selectMyWonAuctionsMyBidsByTitleCat(String itemTitle, Integer idCategory,Integer idUser) {
-//		return DaoFactory.getItemDao().selectMyWonAuctionsMyBidsByTitleCat(itemTitle,idCategory,idUser);
-//	}
-
-//	private List<ItemAllInformation> selectMyWonAuctionsMyBidsByTitle(String itemTitle, Integer idUser) {
-//		return DaoFactory.getItemDao().selectMyWonAuctionsMyBidsByTitle(itemTitle,idUser);
-//	}
-
-//	private List<ItemAllInformation> selectMyWonAuctionsMyBidsByCategory(Integer idCategory, Integer idUser) {
-//		return DaoFactory.getItemDao().selectMyWonAuctionsMyBidsByCategory(idCategory,idUser);
-//	}
-
-//	private List<ItemAllInformation> selectMyWonAuctionsMyBids(Integer idUser) {
-//		return DaoFactory.getItemDao().selectMyWonAuctionsMyBids(idUser);
-//	}
-
-//	private List<ItemAllInformation> selectMyWonAuctionsByTitle(String itemTitle, Integer idUser) {
-//		return DaoFactory.getItemDao().selectMyWonAuctionsByTitle(itemTitle,idUser);
-//	}
-
-//	private List<ItemAllInformation> selectMyWonAuctionsByTitleCat(String itemTitle, Integer idCategory,Integer idUser) {
-//		return DaoFactory.getItemDao().selectMyWonAuctionsByTitleCat(itemTitle,idCategory,idUser);
-//	}
-
-//	private List<ItemAllInformation> selectMyWonAuctionsByCategory(Integer idCategory, Integer idUser) {
-//		return DaoFactory.getItemDao().selectMyWonAuctionsByCategory(idCategory,idUser);
-//	}
-
-//	private List<ItemAllInformation> selectMyWonAuctions(Integer idUser) {
-//		return DaoFactory.getItemDao().selectMyWonAuctions(idUser);
-//	}
-
-//	private List<ItemAllInformation> selectMyCurrentAuctionsByTitleCat(String itemTitle, Integer idCategory,Integer idUser) {
-//		return DaoFactory.getItemDao().selectMyCurrentAuctionsByTitleCat(itemTitle,idCategory,idUser);
-//	}
-
-//	private List<ItemAllInformation> selectMyCurrentAuctionsByTitle(String itemTitle, Integer idUser) {
-//		return DaoFactory.getItemDao().selectMyCurrentAuctionsByTitle(itemTitle,idUser);
-//	}
-
-//	private List<ItemAllInformation> selectMyCurrentAuctionsByCategory(Integer idCategory, Integer idUser) {
-//		return DaoFactory.getItemDao().selectMyCurrentAuctionsByCategory(idCategory,idUser);
-//	}
-
-//	private List<ItemAllInformation> selectMyCurrentAuctions(Integer idUser) {
-//		return DaoFactory.getItemDao().selectMyCurrentAuctions(idUser);
-//	}
-
-//	private List<ItemAllInformation> selectCurrentAuctionsByTitleCat(String itemTitle, Integer idCategory) {
-//		return DaoFactory.getItemDao().selectCurrentAuctionsByTitleCat(itemTitle,idCategory);
-//	}
-
-//	private List<ItemAllInformation> selectCurrentAuctionsByTitle(String itemTitle) {
-//		return DaoFactory.getItemDao().selectCurrentAuctionsByTitle(itemTitle);
-//	}
-
-//	private List<ItemAllInformation> selectCurrentAuctionsByCategory(Integer idCategory) {
-//		return DaoFactory.getItemDao().selectCurrentAuctionsByCategory(idCategory);
+//	public List<ItemAllInformation> searchSales(Boolean currentSales, Boolean newSales, Boolean finishedSales,String itemTitle, Integer idCategory, Integer idUser) {
+//		// ----------------------- checked : (enchères ouvertes) OU (enchères ouvertes + mes enchères) --------------------------------
+//				if (currentSales && !newSales && !finishedSales) {
+//					// TITLE IS EMPTY
+//					if (itemTitle.isBlank() || itemTitle.isEmpty()) {
+//						if (idCategory==0) {
+//							// CATEGORY IS EMPTY TOO --> SELECT ALL, MY FRIEND
+//							return DaoFactory.getItemDao().selectAllCurrentSales();
+//						}else {
+//							// CATEGORY ISN'T NULL SO YOU SELECT ALL WITH A CATEGORY
+//							return DaoFactory.getItemDao().selectCurrentAuctionsByCategory(idCategory);
+//						}
+//					}else { // is itemTitle blank or empty : NO
+//						if (idCategory==0) {
+//							return DaoFactory.getItemDao().selectCurrentAuctionsByTitle(itemTitle);
+//						}else {
+//							return DaoFactory.getItemDao().selectCurrentAuctionsByTitleCat(itemTitle,idCategory);
+//						}
+//					}
+//		return null;
 //	}
 	
-	/**
-	 * Used directly on the home page, hence the "public" visibility
-	 * @return List<ItemAllInformation> 
-	 */
-	public List<ItemAllInformation> selectAllCurrentAuctions() {
-		return DaoFactory.getItemDao().selectAllCurrentAuctions();
-	}
+	
+	
 
 	
 	public ItemAllInformation selectById(Integer id) {
 		return DaoFactory.getItemDao().selectById(id);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	private void checkFieldsItem(Item item) throws BLLException {
 		BLLException bll = new BLLException();

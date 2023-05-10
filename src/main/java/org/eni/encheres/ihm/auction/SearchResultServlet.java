@@ -70,8 +70,8 @@ public class SearchResultServlet extends HttpServlet {
 				finishedSales = true;
 				System.out.println("Servlet : mes ventes terminées");
 			}
-			List<ItemAllInformation> salesList = ItemManager.getInstance().searchSales(currentSales,newSales,finishedSales,itemTitle,idCategory,idUser);
-			request.setAttribute("itemsList", salesList);
+//			List<ItemAllInformation> salesList = ItemManager.getInstance().searchSales(currentSales,newSales,finishedSales,itemTitle,idCategory,idUser);
+//			request.setAttribute("itemsList", salesList);
 		}else {
 			currentAuctions = true;
 			List<ItemAllInformation> allItemsList = ItemManager.getInstance().searchAuctions(currentAuctions,myBids,wonAuctions,itemTitle,idCategory, idUser);

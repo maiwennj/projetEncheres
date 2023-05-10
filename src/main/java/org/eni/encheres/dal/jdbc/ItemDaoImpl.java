@@ -57,11 +57,11 @@ public class ItemDaoImpl implements ItemDao {
 	final String PART_AUCTION_USER = " AND e.no_utilisateur=?";
 	
 	// BASES
-	final String SELECT_ALL_CURRENT_AUCTIONS = "SELECT a.no_article, nom_article,description,date_debut_encheres,date_fin_encheres,prix_initial,a.no_utilisateur as vendeur,pseudo,e.no_utilisateur,montant_enchere"
-			+ "	FROM ARTICLES_VENDUS a"
-			+ "	INNER JOIN UTILISATEURS u ON a.no_utilisateur=u.no_utilisateur"
-			+ "	LEFT JOIN ENCHERES e ON a.no_article=e.no_article"
-			+ "	WHERE etat_vente LIKE 'E'";
+	final String SELECT_ALL_CURRENT_AUCTIONS = "SELECT a.no_article, nom_article,description,date_debut_encheres,date_fin_encheres,prix_initial,a.no_utilisateur as vendeur,pseudo,e.no_utilisateur as enchérisseur,montant_enchere"
+			+ " FROM ARTICLES_VENDUS a"
+			+ " INNER JOIN UTILISATEURS u ON a.no_utilisateur=u.no_utilisateur"
+			+ " LEFT JOIN ENCHERES e ON a.no_article=e.no_article"
+			+ " WHERE etat_vente LIKE 'E' AND (montant_enchere=(SELECT MAX(montant_enchere) FROM ENCHERES WHERE no_article=e.no_article) OR montant_enchere IS null)";
 	final String SELECT_FINISHED_AUCTIONS = "SELECT a.no_article, nom_article,description,date_debut_encheres,date_fin_encheres,prix_initial,a.no_utilisateur as vendeur,pseudo,e.no_utilisateur,montant_enchere"
 			+ "	FROM ARTICLES_VENDUS a"
 			+ "	INNER JOIN UTILISATEURS u ON a.no_utilisateur=u.no_utilisateur"
