@@ -64,6 +64,7 @@ public class ItemManager {
 					return DaoFactory.getItemDao().selectCurrentAuctionsByTitleCat(itemTitle,idCategory);
 				}
 			}
+
 		// ----------------------- checked : mes enchères en cours  --------------------------------
 		}else if (!currentAuctions && myBids && !wonAuctions) {
 			// TITLE IS EMPTY

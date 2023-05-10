@@ -48,7 +48,27 @@ public class ItemDaoImpl implements ItemDao {
 			+ "            ORDER BY  montant_enchere DESC";
 	final String INSERT_ITEM = "INSERT INTO ARTICLES_VENDUS (nom_article,description,date_debut_encheres,date_fin_encheres,prix_initial,no_utilisateur,no_categorie,etat_vente) "
 			+ "VALUES (?,?,?,?,?,?,?,?)";
-	
+
+	//final String SELECT_ITEM_BY_ID = "SELECT * FROM ARTICLES_VENDUS WHERE no_article =?";
+//	/**
+//	 * Returns ItemAllInformation needed for the search results. It's created with 3 Objects (Item,User,Auction)
+//	 */
+//	public List<ItemAllInformation> selectItemsByState(String itemState) {
+//		List<ItemAllInformation> itemsList = new ArrayList<>();
+//		try (Connection cnx = ConnectionProvider.getConnection()){
+//			PreparedStatement pStmt = cnx.prepareStatement(SELECT_ITEMS_BY_STATE);
+//			pStmt.setString(1, itemState);
+//			ResultSet rs = pStmt.executeQuery();
+//			while (rs.next()) {
+//				itemsList.add(mapItemAllInfo3(rs));
+//			}
+//			return itemsList;
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//		return null;
+//	}
+
 	
 	// ***********************************  AUCTIONS ************************************
 	// PARTS
@@ -117,11 +137,27 @@ public class ItemDaoImpl implements ItemDao {
 		}
 		return null;
 	}
+	
+//	@Override
+//	public Item selectItemById(Integer id) {
+//		try (Connection cnx = ConnectionProvider.getConnection()){
+//			PreparedStatement pStmt = cnx.prepareStatement(SELECT_ITEM_BY_ID);
+//			pStmt.setInt(1,id);
+//			ResultSet rs = pStmt.executeQuery();
+//			if (rs.next()) {
+//				return mapItem(rs);
+//			}
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//		return null;
+//	}
+
 
 	@Override
 	public Item insertItem(Item item) {
 			try(Connection connection = ConnectionProvider.getConnection()){
-				System.out.println("ItemDaoImpl"+item);
+				//System.out.println("ItemDaoImpl"+item);
 				PreparedStatement pStmt = connection.prepareStatement(INSERT_ITEM,PreparedStatement.RETURN_GENERATED_KEYS);
 				pStmt.setString(1,item.getItemTitle());
 				pStmt.setString(2,item.getDescription());
@@ -152,7 +188,6 @@ public class ItemDaoImpl implements ItemDao {
 				new Category(rs.getString(4)),
 				new CollectionPoint(item, rs.getString(9), rs.getString(10), rs.getString(11))
 				);
-		System.out.println(itemAllInfo);
 		return itemAllInfo;
 	}
 	
@@ -625,5 +660,5 @@ public class ItemDaoImpl implements ItemDao {
 		}
 		return null;
 	}
-	
+
 }

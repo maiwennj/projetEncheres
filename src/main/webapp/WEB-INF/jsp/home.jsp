@@ -12,6 +12,7 @@
 <%
 	User user = (User)session.getAttribute("user");
 	String info = Flash.getMessage("success", session);
+	
 %>
 
 <!DOCTYPE html>
@@ -36,6 +37,7 @@
 						</div>
 					<%} %>
 				<%//------  if account created %>
+
 				<div class="text-center mt-5">
 					<h1>Liste des enchères</h1>
 				</div>
