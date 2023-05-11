@@ -6,6 +6,7 @@ import java.util.List;
 import org.eni.encheres.bll.exception.BLLException;
 import org.eni.encheres.bo.Item;
 import org.eni.encheres.bo.ItemAllInformation;
+import org.eni.encheres.bo.User;
 import org.eni.encheres.dal.DaoFactory;
 
 import lombok.Getter;
@@ -342,6 +343,15 @@ public class ItemManager {
 				throw bll;
 			}
 		}
+
+
+	public List<ItemAllInformation> selectAuctionsByToBoDeletedUser(User user) {
+		return DaoFactory.getItemDao().selectAuctionsByToBoDeletedUser(user.getNoUser());
+	}
+
+	public List<ItemAllInformation> selectSalesByToBoDeletedUser(User user) {
+		return DaoFactory.getItemDao().selectSalesByToBoDeletedUser(user.getNoUser());
+	}
 
 	
 }

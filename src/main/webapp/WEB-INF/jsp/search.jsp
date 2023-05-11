@@ -64,7 +64,8 @@ String libelleCategory = searchedCategory.getLibelle();
 		    function enable(node){
 		        var listeChecks = node.querySelectorAll("input[type=checkbox]");
 		        listeChecks.forEach((value,index,array)=>{
-		            value.disabled= false;          
+		            value.disabled= false;
+		        var byDefault
 		        }); 
 		    }
 	</script>

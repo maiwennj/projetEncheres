@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.eni.encheres.bo.Item;
 import org.eni.encheres.bo.ItemAllInformation;
+import org.eni.encheres.bo.User;
 
 public interface ItemDao {
 
@@ -88,6 +89,10 @@ public interface ItemDao {
 	List<ItemAllInformation> selectAllCheckedSalesByCat(Integer idUser, Integer idCategory);
 	List<ItemAllInformation> selectAllCheckedSalesByTitle(Integer idUser, String itemTitle);
 	List<ItemAllInformation> selectAllCheckedSalesByTitleCat(Integer idUser, String itemTitle, Integer idCategory);
+	
+	// METHODS FOR TO BE DELETED USER
+	List<ItemAllInformation> selectAuctionsByToBoDeletedUser(Integer noUser);
+	List<ItemAllInformation> selectSalesByToBoDeletedUser(Integer noUser);
 	
 	
 }

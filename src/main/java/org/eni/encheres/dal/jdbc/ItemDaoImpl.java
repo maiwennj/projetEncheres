@@ -55,7 +55,7 @@ public class ItemDaoImpl implements ItemDao {
 			+ "	FROM ARTICLES_VENDUS a"
 			+ "	INNER JOIN UTILISATEURS u ON a.no_utilisateur=u.no_utilisateur"
 			+ "	LEFT JOIN ENCHERES e ON a.no_article=e.no_article"
-			+ "	WHERE etat_vente IN ('A','T') and montant_enchere=prix_vente";
+			+ "	WHERE etat_vente IN ('A','T') AND (montant_enchere=(SELECT MAX(montant_enchere) FROM ENCHERES WHERE no_article=e.no_article) OR montant_enchere IS null)";
 	
 	// FINALES 
 	// enchères en cours
@@ -63,10 +63,16 @@ public class ItemDaoImpl implements ItemDao {
 	final String SELECT_CURRENT_AUCTIONS_BY_TITLE = SELECT_ALL_CURRENT_AUCTIONS+PART_TITLE;
 	final String SELECT_CURRENT_AUCTIONS_BY_TITLE_CAT = SELECT_ALL_CURRENT_AUCTIONS+PART_TITLE+PART_CATEGORY;
 	// mes enchères en cours
-	final String SELECT_MY_CURRENT_AUCTIONS = SELECT_ALL_CURRENT_AUCTIONS+PART_AUCTION_USER;
-	final String SELECT_MY_CURRENT_AUCTIONS_BY_TITLE_CAT = SELECT_CURRENT_AUCTIONS_BY_TITLE_CAT+PART_AUCTION_USER;
-	final String SELECT_MY_CURRENT_AUCTIONS_BY_TITLE = SELECT_CURRENT_AUCTIONS_BY_TITLE+PART_AUCTION_USER;
-	final String SELECT_MY_CURRENT_AUCTIONS_BY_CAT = SELECT_CURRENT_AUCTIONS_BY_CAT+PART_AUCTION_USER;
+	final String SELECT_MY_CURRENT_AUCTIONS = "SELECT e.no_article,nom_article,description,date_debut_encheres,date_fin_encheres,prix_initial,a.no_utilisateur as vendeur_id,pseudo as vendeur_pseudo,e.no_utilisateur as ench_id, montant_enchere"
+			+ " FROM ENCHERES as e "
+			+ " INNER JOIN(SELECT no_article, MAX(montant_enchere) as max_bid FROM ENCHERES group by no_article) as mb on e.no_article = mb.no_article and e.montant_enchere = mb.max_bid"
+			+ " INNER JOIN(SELECT no_article,date_enchere FROM ENCHERES WHERE no_utilisateur = ?) as e_user ON e.no_article = e_user.no_article"
+			+ " left join ARTICLES_VENDUS a on a.no_article=e.no_article"
+			+ " left join UTILISATEURS u on u.no_utilisateur=a.no_utilisateur"
+			+ " where etat_vente LIKE 'E'";
+	final String SELECT_MY_CURRENT_AUCTIONS_BY_TITLE_CAT = SELECT_MY_CURRENT_AUCTIONS+PART_TITLE+PART_CATEGORY;
+	final String SELECT_MY_CURRENT_AUCTIONS_BY_TITLE = SELECT_MY_CURRENT_AUCTIONS+PART_TITLE;
+	final String SELECT_MY_CURRENT_AUCTIONS_BY_CAT = SELECT_MY_CURRENT_AUCTIONS+PART_CATEGORY;
 	// mes enchères remportées
 	final String SELECT_MY_WON_AUCTIONS = SELECT_FINISHED_AUCTIONS+PART_AUCTION_USER;
 	final String SELECT_MY_WON_AUCTIONS_BY_CAT = SELECT_FINISHED_AUCTIONS+PART_CATEGORY+PART_AUCTION_USER;
@@ -90,7 +96,7 @@ public class ItemDaoImpl implements ItemDao {
 
 
 	// ***********************************  SALES ************************************		
-		// BASES
+	// BASES
 	final String SELECT_CURRENT_SALES = "SELECT a.no_article, nom_article,description,date_debut_encheres,date_fin_encheres,prix_initial,a.no_utilisateur as vendeur,pseudo,e.no_utilisateur as enchérisseur,montant_enchere"
 			+ " FROM ARTICLES_VENDUS a"
 			+ " INNER JOIN UTILISATEURS u ON a.no_utilisateur=u.no_utilisateur"
@@ -105,7 +111,7 @@ public class ItemDaoImpl implements ItemDao {
 			+ "	FROM ARTICLES_VENDUS a"
 			+ "	INNER JOIN UTILISATEURS u ON a.no_utilisateur=u.no_utilisateur"
 			+ "	LEFT JOIN ENCHERES e ON a.no_article=e.no_article"
-			+ "	WHERE etat_vente IN ('A','T') and montant_enchere=prix_vente  AND a.no_utilisateur=?";
+			+ "	WHERE etat_vente IN ('A','T') AND (montant_enchere=(SELECT MAX(montant_enchere) FROM ENCHERES WHERE no_article=e.no_article) OR montant_enchere IS null) AND a.no_utilisateur=?";
 	final String SELECT_ALL_CHECKED_SALES = "SELECT a.no_article, nom_article,description,date_debut_encheres,date_fin_encheres,prix_initial,a.no_utilisateur as vendeur,pseudo,e.no_utilisateur as enchérisseur,montant_enchere"
 			+ " FROM ARTICLES_VENDUS a"
 			+ " INNER JOIN UTILISATEURS u ON a.no_utilisateur=u.no_utilisateur"
@@ -148,6 +154,22 @@ public class ItemDaoImpl implements ItemDao {
 	final String SELECT_ALL_CHECKED_SALES_BY_TITLE = SELECT_ALL_CHECKED_SALES+PART_TITLE;
 	final String SELECT_ALL_CHECKED_SALES_BY_CAT = SELECT_ALL_CHECKED_SALES+PART_CATEGORY;
 	final String SELECT_ALL_CHECKED_SALES_BY_TITLE_CAT = SELECT_ALL_CHECKED_SALES+PART_TITLE+PART_CATEGORY;
+	
+	final String SELECT_AUCTIONS_USER_TO_BE_DELETED = "SELECT a.no_article, nom_article,description,date_debut_encheres,date_fin_encheres,prix_initial,a.no_utilisateur as vendeur,pseudo,e.no_utilisateur as enchérisseur,montant_enchere\"\r\n"
+			+ " FROM ARTICLES_VENDUS a"
+			+ " INNER JOIN UTILISATEURS u ON a.no_utilisateur=u.no_utilisateur"
+			+ " LEFT JOIN ENCHERES e ON a.no_article=e.no_article"
+			+ "	WHERE etat_vente LIKE 'E' AND (montant_enchere=(SELECT MAX(montant_enchere) FROM ENCHERES WHERE no_article=e.no_article) OR montant_enchere IS null) AND e.no_utilisateur=?;";
+	
+	final String SELECT_AUCTIONS_BY_USER_TO_DELETE = "SELECT a.no_article, nom_article,description,date_debut_encheres,date_fin_encheres,prix_initial,a.no_utilisateur as vendeur,pseudo,e.no_utilisateur as enchérisseur,montant_enchere"
+			+ " FROM ARTICLES_VENDUS a"
+			+ " INNER JOIN UTILISATEURS u ON a.no_utilisateur=u.no_utilisateur"
+			+ " LEFT JOIN ENCHERES e ON a.no_article=e.no_article"
+			+ " WHERE etat_vente IN ('E','T') AND e.no_utilisateur=?";
+	final String SELECT_SALES_BY_USER_TO_DELETE = "SELECT a.no_article, nom_article,description,date_debut_encheres,date_fin_encheres,prix_initial,a.no_utilisateur as vendeur,pseudo,e.no_utilisateur as enchérisseur,montant_enchere"
+			+ " FROM ARTICLES_VENDUS a INNER JOIN UTILISATEURS u ON a.no_utilisateur=u.no_utilisateur"
+			+ " LEFT JOIN ENCHERES e ON a.no_article=e.no_article"
+			+ " WHERE etat_vente in ('E','T') AND a.no_utilisateur=?";
 	
 	
 	@Override
@@ -314,9 +336,9 @@ public class ItemDaoImpl implements ItemDao {
 		List<ItemAllInformation> auctionsList = new ArrayList<>();
 		try (Connection cnx = ConnectionProvider.getConnection()){
 			PreparedStatement pStmt = cnx.prepareStatement(SELECT_MY_CURRENT_AUCTIONS_BY_TITLE_CAT);
-			pStmt.setString(1, "%"+itemTitle+"%");
-			pStmt.setInt(2, idCategory);
-			pStmt.setInt(3, idUser);
+			pStmt.setInt(1, idUser);
+			pStmt.setString(2, "%"+itemTitle+"%");
+			pStmt.setInt(3, idCategory);
 			ResultSet rs = pStmt.executeQuery();
 			while (rs.next()) {
 				auctionsList.add(mapItemAllInfo3(rs));
@@ -333,8 +355,8 @@ public class ItemDaoImpl implements ItemDao {
 		List<ItemAllInformation> auctionsList = new ArrayList<>();
 		try (Connection cnx = ConnectionProvider.getConnection()){
 			PreparedStatement pStmt = cnx.prepareStatement(SELECT_MY_CURRENT_AUCTIONS_BY_TITLE);
-			pStmt.setString(1, "%"+itemTitle+"%");
-			pStmt.setInt(2, idUser);
+			pStmt.setInt(1, idUser);
+			pStmt.setString(2, "%"+itemTitle+"%");
 			ResultSet rs = pStmt.executeQuery();
 			while (rs.next()) {
 				auctionsList.add(mapItemAllInfo3(rs));
@@ -351,8 +373,8 @@ public class ItemDaoImpl implements ItemDao {
 		List<ItemAllInformation> auctionsList = new ArrayList<>();
 		try (Connection cnx = ConnectionProvider.getConnection()){
 			PreparedStatement pStmt = cnx.prepareStatement(SELECT_MY_CURRENT_AUCTIONS_BY_CAT);
-			pStmt.setInt(1,idCategory);
-			pStmt.setInt(2, idUser);
+			pStmt.setInt(1, idUser);
+			pStmt.setInt(2,idCategory);
 			ResultSet rs = pStmt.executeQuery();
 			while (rs.next()) {
 				auctionsList.add(mapItemAllInfo3(rs));
@@ -1186,6 +1208,40 @@ public class ItemDaoImpl implements ItemDao {
 			pStmt.setInt(1, idUser);
 			pStmt.setString(2, "%"+itemTitle+"%");
 			pStmt.setInt(3, idCategory);
+			ResultSet rs = pStmt.executeQuery();
+			while (rs.next()) {
+				salesList.add(mapItemAllInfo3(rs));
+			}
+			return salesList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public List<ItemAllInformation> selectAuctionsByToBoDeletedUser(Integer noUser) {
+		List<ItemAllInformation> auctionsList = new ArrayList<>();
+		try (Connection cnx = ConnectionProvider.getConnection()){
+			PreparedStatement pStmt = cnx.prepareStatement(SELECT_AUCTIONS_BY_USER_TO_DELETE);
+			pStmt.setInt(1, noUser);
+			ResultSet rs = pStmt.executeQuery();
+			while (rs.next()) {
+				auctionsList.add(mapItemAllInfo3(rs));
+			}
+			return auctionsList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public List<ItemAllInformation> selectSalesByToBoDeletedUser(Integer noUser) {
+		List<ItemAllInformation> salesList = new ArrayList<>();
+		try (Connection cnx = ConnectionProvider.getConnection()){
+			PreparedStatement pStmt = cnx.prepareStatement(SELECT_SALES_BY_USER_TO_DELETE);
+			pStmt.setInt(1, noUser);
 			ResultSet rs = pStmt.executeQuery();
 			while (rs.next()) {
 				salesList.add(mapItemAllInfo3(rs));

@@ -32,11 +32,12 @@ public class AccountDeleteServlet extends HttpServlet {
 			if(result.verified) {
 				UserManager.getInstance().deleteUser(user);
 				if(UserManager.getInstance().selectOneUser(user.getNoUser())==null){
-					Flash.send("success", "Votre compte a bien été supprimé", request.getSession());
-					response.sendRedirect("/deconnexion");	
+					session.invalidate();
+					//redirige vers la home
+					response.sendRedirect(request.getContextPath() + "/");	
 				}else {//si l'user existe encore on retourne une erreur
 					BLLException bll = new BLLException();
-					bll.addError("Une erreur à eu lieu lors de la suppression");
+					bll.addError("Une erreur a eu lieu lors de la suppression.");
 					throw bll;
 				}
 			}else {//si le mot de passe n'est pas bon on retourne une erreur

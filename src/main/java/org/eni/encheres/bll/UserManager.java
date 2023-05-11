@@ -75,9 +75,28 @@ public class UserManager {
 	
 	//DELETE ------------
 	
-	public void deleteUser(User user) {
-		DaoFactory.getUserDao().deleteUser(user);
+	public void deleteUser(User user) throws BLLException {
+		BLLException bll = new BLLException();
+		if (ItemManager.getInstance().selectAuctionsByToBoDeletedUser(user).size()!=0){
+			System.out.println(ItemManager.getInstance().selectAuctionsByToBoDeletedUser(user).size());
+			bll.addError("Vous avez des enchères sur des articles en cours.");
+		}
+		if (ItemManager.getInstance().selectSalesByToBoDeletedUser(user).size()!=0) {
+			System.out.println(ItemManager.getInstance().selectSalesByToBoDeletedUser(user).size());
+			bll.addError("Vous avez des ventes en cours.");
+		}	
+		if (bll.getErreurs().size()>0) {
+			throw bll;
+		}else{
+			DaoFactory.getUserDao().deleteUser(user);
+		}
 	}
+		
+		
+		
+		
+		
+	
 	
 	
 	//CHECKS ------------
