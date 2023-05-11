@@ -22,7 +22,8 @@ import org.eni.encheres.helpers.Flash;
 				"/mon-profil",
 				"/nouvelle-vente",
 				"/modifier-profil",
-				"/detail-vente/*"
+				"/detail-vente/*",
+				"/annuler-vente/*"
 		}
 		
 		)

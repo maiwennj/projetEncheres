@@ -60,7 +60,7 @@ public class AccountUpdateServlet extends HttpServlet {
 					response.sendRedirect(request.getContextPath() + "/profil/" + newUser.getNoUser());
 				}else{
 					BLLException bll = new BLLException();
-					bll.addError("Le nouveau mot de passe et la vérification ne correspondent pas\"");
+					bll.addError("Le nouveau mot de passe et la vérification ne correspondent pas");
 					throw bll;
 				}	
 			//sinon on retourne une erreur	

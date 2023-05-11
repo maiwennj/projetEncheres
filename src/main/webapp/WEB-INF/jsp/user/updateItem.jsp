@@ -18,9 +18,9 @@
  	String initialPrice = String.valueOf(itemInf.getInitialPrice()) ;
  	String startDate = String.valueOf(itemInf.getStartDate()) ;
  	String endDate = String.valueOf(itemInf.getEndDate());
- 	String street = itemInf.getUser().getStreet();
- 	String postCode = itemInf.getUser().getPostCode();
- 	String city = itemInf.getUser().getCity();
+ 	String street = itemAllInf.getCollectionPoint().getStreetCP();
+ 	String postCode = itemAllInf.getCollectionPoint().getPostCodeCP();
+ 	String city = itemAllInf.getCollectionPoint().getCityCP();
  	
  	List<Category> listCategories = (List<Category>)request.getAttribute("listCategories");
 	List<String> errors = (List<String>) request.getAttribute("errors");
@@ -105,9 +105,9 @@
 						</div>
 					</fieldset>
 					<div>
-						<button class="btn btn-success" type="submit">Enregistrer</button>
-						<a class="btn btn-warning" href="<%= request.getContextPath() %>">Annuler</a>
-						<a class="btn btn-warning" href="<%= request.getContextPath() %>/annuler-vente/<%= itemInf.getNoItem()%>">Annuler la vente</a>
+						<button class="btn btn-success" type="submit" disabled>Enregistrer</button>
+						<a class="btn btn-warning " href="<%= request.getContextPath()%>" >Annuler</a>
+						<a class="btn btn-danger disabled" href="#">Annuler la vente</a>
 					</div>
 				</form>
 			</div>
