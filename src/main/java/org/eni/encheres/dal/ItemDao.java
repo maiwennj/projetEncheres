@@ -9,6 +9,7 @@ public interface ItemDao {
 
 	ItemAllInformation selectById(Integer id);
 	Item insertItem(Item item);
+	void archiveItem(ItemAllInformation itemAllInf);
 	
 	//	ENCHERES EN COURS : HOME, OU *, ou CAS : 1 || 1+2
 	List<ItemAllInformation> selectAllCurrentAuctions();
@@ -88,6 +89,7 @@ public interface ItemDao {
 	List<ItemAllInformation> selectAllCheckedSalesByCat(Integer idUser, Integer idCategory);
 	List<ItemAllInformation> selectAllCheckedSalesByTitle(Integer idUser, String itemTitle);
 	List<ItemAllInformation> selectAllCheckedSalesByTitleCat(Integer idUser, String itemTitle, Integer idCategory);
+	
 	
 	
 }

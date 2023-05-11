@@ -46,7 +46,7 @@ public class ItemManager {
 	 */
 	public List<ItemAllInformation> searchAuctions(Boolean currentAuctions, Boolean myBids, Boolean wonAuctions,String itemTitle, Integer idCategory, Integer idUser) {	
 		// ----------------------- checked : (enchères ouvertes) OU (enchères ouvertes + mes enchères) --------------------------------
-		if ((currentAuctions && !myBids && !wonAuctions) || (currentAuctions && myBids && !wonAuctions)) {
+		if ((currentAuctions && !myBids && !wonAuctions) || (currentAuctions && myBids && !wonAuctions) ||(!currentAuctions && !myBids && !wonAuctions)) {
 			// TITLE IS EMPTY
 			if (itemTitle.isBlank() || itemTitle.isEmpty()) {
 				if (idCategory==0) {
@@ -161,7 +161,7 @@ public class ItemManager {
 	
 	public List<ItemAllInformation> searchSales(Boolean currentSales, Boolean newSales, Boolean finishedSales,String itemTitle, Integer idCategory, Integer idUser) {
 		// ----------------------- checked : ventes en cours	 --------------------------------
-		if (currentSales && !newSales && !finishedSales) {
+		if ((currentSales && !newSales && !finishedSales)||(!currentSales && !newSales && !finishedSales)) {
 			// TITLE IS EMPTY
 			if (itemTitle.isBlank() || itemTitle.isEmpty()) {
 				if (idCategory==0) {
@@ -342,6 +342,10 @@ public class ItemManager {
 				throw bll;
 			}
 		}
+
+	public void archiveItem(ItemAllInformation itemAllInf) {
+		DaoFactory.getItemDao().archiveItem(itemAllInf);
+	}
 
 	
 }

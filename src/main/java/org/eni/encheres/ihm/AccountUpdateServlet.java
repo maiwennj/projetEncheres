@@ -55,12 +55,12 @@ public class AccountUpdateServlet extends HttpServlet {
 					//on lance l'update de user
 					UserManager.getInstance().updateUser(newUser);
 					//on recupère user dans bdd pour avoir toutes les info à jour
-					session.setAttribute("user", newUser);
+					session.setAttribute("user", UserManager.getInstance().selectOneUser(oldUser.getNoUser()));
 					Flash.send("success", "Votre compte a bien été modifié ", request.getSession());
 					response.sendRedirect(request.getContextPath() + "/profil/" + newUser.getNoUser());
 				}else{
 					BLLException bll = new BLLException();
-					bll.addError("Le nouveau mot de passe et la vérification ne correspondent pas\"");
+					bll.addError("Le nouveau mot de passe et la vérification ne correspondent pas");
 					throw bll;
 				}	
 			//sinon on retourne une erreur	

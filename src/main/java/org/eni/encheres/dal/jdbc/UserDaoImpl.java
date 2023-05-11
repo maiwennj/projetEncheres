@@ -200,6 +200,7 @@ public class UserDaoImpl implements UserDao{
 			pStmt.setInt(10, newUser.getNoUser());
 			
 			pStmt.executeUpdate();
+			newUser = selectOneUser(newUser.getNoUser());
 			
 		} catch (SQLException e) {
 			e.printStackTrace();

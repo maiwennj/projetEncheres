@@ -66,6 +66,17 @@ public class User {
 		this.username = username;
 	}
 	
+	/**
+	 * This constructor is used when an object ItemAllInformation is created by a search result.
+	 * @param noUser
+	 * @param username
+	 */
+	public User(Integer noUser, @NonNull String username, String phoneNumber) {
+		super();
+		this.noUser = noUser;
+		this.username = username;
+		this.phoneNumber = phoneNumber;
+	}
 	
 	
 }

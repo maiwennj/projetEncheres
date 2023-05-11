@@ -18,4 +18,34 @@
     <servlet-name>DetailAuctionServlet</servlet-name>
     <url-pattern>/DetailAuctionServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>UpdateItemServlet</display-name>
+    <servlet-name>UpdateItemServlet</servlet-name>
+    <servlet-class>org.eni.encheres.ihm.auction.UpdateItemServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UpdateItemServlet</servlet-name>
+    <url-pattern>/UpdateItemServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>DeleteItemServlet</display-name>
+    <servlet-name>DeleteItemServlet</servlet-name>
+    <servlet-class>org.eni.encheres.ihm.auction.DeleteItemServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DeleteItemServlet</servlet-name>
+    <url-pattern>/DeleteItemServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ArchiveItemServlet</display-name>
+    <servlet-name>ArchiveItemServlet</servlet-name>
+    <servlet-class>org.eni.encheres.ihm.ArchiveItemServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ArchiveItemServlet</servlet-name>
+    <url-pattern>/ArchiveItemServlet</url-pattern>
+  </servlet-mapping>
 </web-app>
