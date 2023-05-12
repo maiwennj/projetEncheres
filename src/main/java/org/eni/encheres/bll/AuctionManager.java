@@ -50,7 +50,7 @@ public class AuctionManager {
 	private void checkOffer(Integer offer, User bidder, Item itemBidded, Auction lastAuction, BLLException bll) throws BLLException {
 		//si l'offre est null on retourne une erreur
 		if (offer == null) {
-			bll.addError("Vous n'avez pas fait d'offre");
+			bll.addError("Vous n'avez pas fait d'offre.");
 			throw bll;
 		}
 		
@@ -58,26 +58,26 @@ public class AuctionManager {
 		if(lastAuction.getBid() == null) {
 			//si l'offre est inférieure au crédit de l'utilisateur on ajoute une erreur
 			if(offer > bidder.getCredit()) {
-				bll.addError("Vous n'avez pas assez de crédit pour faire cette enchère");
+				bll.addError("Vous n'avez pas assez de crédits pour faire cette enchère.");
 			}
 			//si l'offre est inférieure au prix initial on ajoute une erreur
 			if(offer < itemBidded.getInitialPrice()) {
-				bll.addError("Vous ne pouvez pas faire une offre inférieure au prix initial");
+				bll.addError("Vous ne pouvez pas faire une offre inférieure au prix initial.");
 			}
-		//sinon si il existe déjà une enchère
+		//sinon s'il existe déjà une enchère
 		}else{
 			//si la dernière enchère est de l'utilisateur retourne une erreur
 			if(lastAuction.getUser().getNoUser() == bidder.getNoUser() ) {
-				bll.addError("Vous avez déjà fait l'enchère la plus élevée sur cet article");
+				bll.addError("Vous avez déjà fait l'enchère la plus élevée sur cet article.");
 				throw bll;
 			}else {
 				//si l'offre est inférieure à la dernière offre on ajoute une erreur
 				if (offer <= lastAuction.getBid()  ) {
-					bll.addError("Vous devez faire une offre supérieure à la dernière enchère");
+					bll.addError("Vous devez faire une offre supérieure à la dernière enchère.");
 				}
 				//si l'offer est inférieure au crédit de l'utilisateur on ajoute une erreur
 				if(offer > bidder.getCredit()) {
-					bll.addError("Vous n'avez pas assez de crédit pour faire cette enchère");
+					bll.addError("Vous n'avez pas assez de crédits pour faire cette enchère.");
 				}
 			}
 		}	

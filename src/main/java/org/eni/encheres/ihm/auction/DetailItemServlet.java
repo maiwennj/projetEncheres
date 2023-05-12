@@ -35,7 +35,6 @@ public class DetailItemServlet extends HttpServlet {
 		List<Category> listCategories = CategoryManager.getInstance().selectAllCategories();
 		request.setAttribute("listCategories", listCategories);
 		if (itemAllInfo.getItem().getState().equals("N")) {
-			System.out.println("detai item servle :" + itemAllInfo);
 			request.getRequestDispatcher("/WEB-INF/jsp/user/updateItem.jsp")
 			.forward(request, response);
 		}else {
@@ -54,7 +53,7 @@ public class DetailItemServlet extends HttpServlet {
 			AuctionManager.getInstance().placeABid(offer,bidder,itemBidded.getItem());
 
 			bidder.setCredit(bidder.getCredit()-offer);
-			Flash.send("success", "Votre enchère a bien été prise en compte ", request.getSession());
+			Flash.send("success", "Votre enchère a bien été prise en compte.", request.getSession());
 			response.sendRedirect(request.getContextPath()+"/detail-vente/" + noItemBidded);
 
 		} catch (BLLException e) {
