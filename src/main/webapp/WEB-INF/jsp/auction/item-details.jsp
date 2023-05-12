@@ -1,9 +1,8 @@
+<%@page import="java.time.format.DateTimeFormatter"%>
 <%@page import="org.eni.encheres.helpers.Flash"%>
 <%@page import="org.eni.encheres.bo.Item"%>
 <%@page import="org.eni.encheres.bo.ItemAllInformation"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"
-%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
 <html>
@@ -31,6 +30,7 @@
 				Item itemDetails = itemAllinfo.getItem();
 				List<String> errors = (List<String>) request.getAttribute("errors");
 				String info = Flash.getMessage("success", session);
+				DateTimeFormatter currentFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm");
 			%>
 			
 			
@@ -84,7 +84,7 @@
 								<p>Mise à prix: <%= itemDetails.getInitialPrice()%> points</p>
 							</div>
 							<div class="row">
-								<p>Fin de l'enchère: <%= itemDetails.getEndDate()%></p>
+								<p>Fin de l'enchère: <%= itemDetails.getEndDate().format(currentFormat)%></p>
 							</div>
 							<div class="row">
 								<p>Retrait:</p>
@@ -144,7 +144,7 @@
 								<p>Mise à prix: <%= itemDetails.getInitialPrice()%> points</p>
 							</div>
 							<div class="row">
-								<p>Fin de l'enchère: <%= itemDetails.getEndDate()%></p>
+								<p>Fin de l'enchère: <%= itemDetails.getEndDate().format(currentFormat)%></p>
 							</div>
 							<div class="row">
 								<p>Retrait:</p>

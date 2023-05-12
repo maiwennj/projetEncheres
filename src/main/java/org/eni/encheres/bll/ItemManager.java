@@ -346,6 +346,7 @@ public class ItemManager {
 
 
 
+
 	public List<ItemAllInformation> selectAuctionsByToBoDeletedUser(User user) {
 		return DaoFactory.getItemDao().selectAuctionsByToBoDeletedUser(user.getNoUser());
 	}

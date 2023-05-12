@@ -1,4 +1,5 @@
 
+<%@page import="java.time.format.DateTimeFormatter"%>
 <%@page import="org.eni.encheres.bo.ItemAllInformation"%>
 <%@page import="java.time.LocalDateTime"%>
 <%@page import="java.util.List"%>
@@ -11,10 +12,9 @@
     pageEncoding="UTF-8"
 %>
 <%
-LocalDate.now();
 List <ItemAllInformation> itemsList = (List <ItemAllInformation>) request.getAttribute("itemsList");
 Integer nbResults = itemsList.size() ;
-
+DateTimeFormatter currentFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm");
 %>
 
 	<div class="col-6 mt-2 offset-3">
@@ -30,7 +30,7 @@ Integer nbResults = itemsList.size() ;
 							<div class="card-body">
 								<img src="assets/images-item/300x250.svg"/>
 								<p class="card-text">Prix : <%= ((itemAllInfo.getAuction().getBid())!=null?itemAllInfo.getAuction().getBid():itemAllInfo.getItem().getInitialPrice()) %></p>
-							<p class="card-text">Fin de l'enchère : <%=itemAllInfo.getItem().getEndDate() %></p>
+							<p class="card-text">Fin de l'enchère : <%=itemAllInfo.getItem().getEndDate().format(currentFormat) %></p>
 							<p class="card-text">Vendeur : <a href="<%=request.getContextPath()%>/profil/<%=itemAllInfo.getUser().getNoUser()%>"><%= itemAllInfo.getUser().getUsername() %></a></p>
 							</div>
 							<%if(session.getAttribute("user")!=null) {%>
@@ -45,7 +45,11 @@ Integer nbResults = itemsList.size() ;
 								if (daysBetween==0){ %>
 									<p class="card-text">Aujourd'hui</p>
 								<% } else{%>
-						   		<p class="card-text">Il y a <%= daysBetween %> jour<%= (daysBetween>1)?"s":"" %></p>
+								<%if(daysBetween<0){ %>
+						   			<p class="card-text">Dans <%= -daysBetween %> jour<%= (-daysBetween>1)?"s":"" %></p>
+						   		<%}else{ %>
+						   			<p class="card-text">Il y a <%= daysBetween %> jour<%= (daysBetween>1)?"s":"" %></p>
+						   		<%} %>
 						   		<%} %>
 							</div>
 						</div>

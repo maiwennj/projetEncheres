@@ -18,7 +18,7 @@
 	List<String> errors = (List<String>) request.getAttribute("errors");
 	
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-    String nowDateTime = LocalDateTime.now().format(formatter);
+    String nowDateTime = LocalDateTime.now().plusHours(1).format(formatter);
 	String inAWeekString = LocalDateTime.now().plusDays(7).format(formatter);
 //     nowDateTime.replace(" ", "T");
 	

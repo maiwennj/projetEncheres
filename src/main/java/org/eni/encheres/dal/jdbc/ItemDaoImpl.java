@@ -1220,6 +1220,8 @@ public class ItemDaoImpl implements ItemDao {
 		return null;
 	}
 
+
+
 	@Override
 	public List<ItemAllInformation> selectAuctionsByToBoDeletedUser(Integer noUser) {
 		List<ItemAllInformation> auctionsList = new ArrayList<>();
@@ -1254,7 +1256,7 @@ public class ItemDaoImpl implements ItemDao {
 		return null;
 	}
 
-	
+
 	// ***********************************  ARCHIVE  ************************************	
 	@Override
 	public void archiveItem(ItemAllInformation itemAllInf) {
