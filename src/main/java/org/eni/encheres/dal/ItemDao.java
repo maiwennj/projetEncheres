@@ -10,6 +10,7 @@ public interface ItemDao {
 
 	ItemAllInformation selectById(Integer id);
 	Item insertItem(Item item);
+	void archiveItem(ItemAllInformation itemAllInf);
 	
 	//	ENCHERES EN COURS : HOME, OU *, ou CAS : 1 || 1+2
 	List<ItemAllInformation> selectAllCurrentAuctions();
@@ -93,6 +94,7 @@ public interface ItemDao {
 	// METHODS FOR TO BE DELETED USER
 	List<ItemAllInformation> selectAuctionsByToBoDeletedUser(Integer noUser);
 	List<ItemAllInformation> selectSalesByToBoDeletedUser(Integer noUser);
+	
 	
 	
 }

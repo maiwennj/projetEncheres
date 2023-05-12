@@ -8,11 +8,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.eni.encheres.bll.AuctionManager;
+import org.eni.encheres.bll.CategoryManager;
 import org.eni.encheres.bll.ItemManager;
 import org.eni.encheres.bll.UserManager;
 import org.eni.encheres.bll.exception.BLLException;
+import org.eni.encheres.bo.Category;
 import org.eni.encheres.bo.Item;
 import org.eni.encheres.bo.ItemAllInformation;
 import org.eni.encheres.bo.User;
@@ -29,9 +32,16 @@ public class DetailItemServlet extends HttpServlet {
 		Integer id = Integer.parseInt(params.substring(1));
 		ItemAllInformation itemAllInfo = ItemManager.getInstance().selectById(id);
 		request.setAttribute("itemAllInfo", itemAllInfo);
-			
-		request.getRequestDispatcher("/WEB-INF/jsp/auction/item-details.jsp")
-		.forward(request, response);
+		List<Category> listCategories = CategoryManager.getInstance().selectAllCategories();
+		request.setAttribute("listCategories", listCategories);
+		if (itemAllInfo.getItem().getState().equals("N")) {
+			System.out.println("detai item servle :" + itemAllInfo);
+			request.getRequestDispatcher("/WEB-INF/jsp/user/updateItem.jsp")
+			.forward(request, response);
+		}else {
+			request.getRequestDispatcher("/WEB-INF/jsp/auction/item-details.jsp")
+			.forward(request, response);
+		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

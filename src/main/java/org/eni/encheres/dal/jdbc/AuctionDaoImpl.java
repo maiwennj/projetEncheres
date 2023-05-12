@@ -70,7 +70,7 @@ public class AuctionDaoImpl implements AuctionDao {
 //					System.out.println("insertAuction :" +  itemBidded.getNoItem() +" , " + Timestamp.valueOf(LocalDateTime.now()) + " , "+  offer);
 				insertAuction.executeUpdate();
 				cnx.commit();	
-			} catch (Exception e) {
+			} catch (SQLException e) {
 				System.err.println("rollback");
 				e.printStackTrace();
 				cnx.rollback();

@@ -47,7 +47,7 @@ public class ItemManager {
 	 */
 	public List<ItemAllInformation> searchAuctions(Boolean currentAuctions, Boolean myBids, Boolean wonAuctions,String itemTitle, Integer idCategory, Integer idUser) {	
 		// ----------------------- checked : (enchères ouvertes) OU (enchères ouvertes + mes enchères) --------------------------------
-		if ((currentAuctions && !myBids && !wonAuctions) || (currentAuctions && myBids && !wonAuctions)) {
+		if ((currentAuctions && !myBids && !wonAuctions) || (currentAuctions && myBids && !wonAuctions) ||(!currentAuctions && !myBids && !wonAuctions)) {
 			// TITLE IS EMPTY
 			if (itemTitle.isBlank() || itemTitle.isEmpty()) {
 				if (idCategory==0) {
@@ -162,7 +162,7 @@ public class ItemManager {
 	
 	public List<ItemAllInformation> searchSales(Boolean currentSales, Boolean newSales, Boolean finishedSales,String itemTitle, Integer idCategory, Integer idUser) {
 		// ----------------------- checked : ventes en cours	 --------------------------------
-		if (currentSales && !newSales && !finishedSales) {
+		if ((currentSales && !newSales && !finishedSales)||(!currentSales && !newSales && !finishedSales)) {
 			// TITLE IS EMPTY
 			if (itemTitle.isBlank() || itemTitle.isEmpty()) {
 				if (idCategory==0) {
@@ -345,12 +345,16 @@ public class ItemManager {
 		}
 
 
+
 	public List<ItemAllInformation> selectAuctionsByToBoDeletedUser(User user) {
 		return DaoFactory.getItemDao().selectAuctionsByToBoDeletedUser(user.getNoUser());
 	}
 
 	public List<ItemAllInformation> selectSalesByToBoDeletedUser(User user) {
-		return DaoFactory.getItemDao().selectSalesByToBoDeletedUser(user.getNoUser());
+		return DaoFactory.getItemDao().selectSalesByToBoDeletedUser(user.getNoUser());}
+
+	public void archiveItem(ItemAllInformation itemAllInf) {
+		DaoFactory.getItemDao().archiveItem(itemAllInf);
 	}
 
 	

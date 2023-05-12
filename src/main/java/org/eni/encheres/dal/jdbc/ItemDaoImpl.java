@@ -25,7 +25,7 @@ public class ItemDaoImpl implements ItemDao {
 	
 	//OK POUR MERGE
 	final String SELECT_BY_ID = "SELECT TOP (1) a.no_article, nom_article,description,libelle,date_debut_encheres,date_fin_encheres,prix_initial,a.etat_vente,r.rue,r.code_postal,r.ville,a.no_utilisateur as vendeur, "
-			+ "u.pseudo,e.no_utilisateur as acquereur,u2.pseudo,MAX(montant_enchere) as enchere_max "
+			+ "u.pseudo,e.no_utilisateur as acquereur,u2.pseudo,MAX(montant_enchere) as enchere_max,u.telephone,a.no_categorie "
 			+ "            FROM ARTICLES_VENDUS a "
 			+ "            INNER JOIN UTILISATEURS u ON a.no_utilisateur=u.no_utilisateur "
 			+ "            INNER JOIN CATEGORIES c on c.no_categorie=a.no_categorie "
@@ -34,11 +34,12 @@ public class ItemDaoImpl implements ItemDao {
 			+ "            LEFT JOIN RETRAITS r on r.no_article = a.no_article "
 			+ "            WHERE a.no_article=? "
 			+ "            GROUP BY a.no_article, nom_article,description,libelle,date_debut_encheres,date_fin_encheres,prix_initial,a.etat_vente,r.rue,r.code_postal,r.ville,a.no_utilisateur,\r\n"
-			+ "                u.pseudo,e.no_utilisateur,u2.pseudo,montant_enchere "
+			+ "                u.pseudo,e.no_utilisateur,u2.pseudo,montant_enchere,u.telephone,a.no_categorie  "
 			+ "            ORDER BY  montant_enchere DESC";
 	final String INSERT_ITEM = "INSERT INTO ARTICLES_VENDUS (nom_article,description,date_debut_encheres,date_fin_encheres,prix_initial,no_utilisateur,no_categorie,etat_vente) "
 			+ "VALUES (?,?,?,?,?,?,?,?)";
-
+	final String ARCHIVED_AN_ITEM = "UPDATE ARTICLES_VENDUS SET etat_vente='A' WHERE no_article=?;";
+	final String PAYE_SELLER = "UPDATE UTILISATEURS SET credit = credit + ? WHERE no_utilisateur= ?;";
 	// ***********************************  AUCTIONS ************************************
 	// PARTS
 	final String PART_TITLE = " AND nom_article LIKE ?";
@@ -216,9 +217,9 @@ public class ItemDaoImpl implements ItemDao {
 		Item item = new Item(rs.getInt(1), rs.getString(2), rs.getString(3),rs.getTimestamp(5).toLocalDateTime(), rs.getTimestamp(6).toLocalDateTime(), rs.getInt(7),rs.getString(8));
 		ItemAllInformation itemAllInfo = new ItemAllInformation(
 				item,
-				new User(rs.getInt(12),rs.getString(13)),
+				new User(rs.getInt(12),rs.getString(13),rs.getString(17)),
 				rs.getInt(16)==0?new Auction():new Auction(new User(rs.getInt(14),rs.getString(15)), item, rs.getInt(16)),
-				new Category(rs.getString(4)),
+				new Category(rs.getInt(18),rs.getString(4)),
 				new CollectionPoint(item, rs.getString(9), rs.getString(10), rs.getString(11))
 				);
 		return itemAllInfo;
@@ -1253,4 +1254,29 @@ public class ItemDaoImpl implements ItemDao {
 		return null;
 	}
 
+	
+	// ***********************************  ARCHIVE  ************************************	
+	@Override
+	public void archiveItem(ItemAllInformation itemAllInf) {
+		try (Connection cnx = ConnectionProvider.getConnection()){
+			cnx.setAutoCommit(false);
+			try {
+				PreparedStatement pStmt2 = cnx.prepareStatement(PAYE_SELLER);
+				pStmt2.setInt(1, itemAllInf.getAuction().getBid());
+				pStmt2.setInt(2, itemAllInf.getUser().getNoUser());
+				pStmt2.executeUpdate();
+				
+				PreparedStatement pStmt = cnx.prepareStatement(ARCHIVED_AN_ITEM);
+				pStmt.setInt(1, itemAllInf.getItem().getNoItem());
+				pStmt.executeUpdate();
+				cnx.commit();
+			} catch (SQLException e) {
+				System.err.println("rollback");
+				e.printStackTrace();
+				cnx.rollback();
+			}	
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }
