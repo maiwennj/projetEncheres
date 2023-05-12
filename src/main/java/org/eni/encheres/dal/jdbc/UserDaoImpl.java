@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +32,10 @@ public class UserDaoImpl implements UserDao{
 	final String UPDATE_USER = "UPDATE UTILISATEURS SET pseudo=?,nom=?,prenom=?,email=?,telephone=?,rue=?,code_postal=?,ville=?,mot_de_passe=? WHERE no_utilisateur=?";
 	final String CHECK_USERNAME_USED = "SELECT * FROM UTILISATEURS WHERE pseudo=? AND no_utilisateur!=?";
 	final String CHECK_EMAIL_USED = "SELECT * FROM UTILISATEURS WHERE email=? AND no_utilisateur!=?";
+	
 	final String DELETE_USER = "DELETE UTILISATEURS WHERE no_utilisateur=?";
+	final String DELETE_ITEMS_BY_USER = "DELETE ARTICLES_VENDUS where no_utilisateur=?;";
+
 	
 	public List<User> selectAllUsers() {
 		try (Connection cnx = ConnectionProvider.getConnection()) {
@@ -154,7 +159,7 @@ public class UserDaoImpl implements UserDao{
 		return null;
 	}
 
-	public Object checkUsernameIsNotUsed(String username, int noUser) {
+	public User checkUsernameIsNotUsed(String username, int noUser) {
 		try (Connection cnx = ConnectionProvider.getConnection()) {
 			PreparedStatement pStmt = cnx.prepareStatement(CHECK_USERNAME_USED);
 			pStmt.setString(1, username);
@@ -169,7 +174,7 @@ public class UserDaoImpl implements UserDao{
 		return null;
 	}
 	
-	public Object checkEmailIsNotUsed(String email, int noUser) {
+	public User checkEmailIsNotUsed(String email, int noUser) {
 		try (Connection cnx = ConnectionProvider.getConnection()) {
 			PreparedStatement pStmt = cnx.prepareStatement(CHECK_EMAIL_USED);
 			pStmt.setString(1, email);
@@ -210,15 +215,24 @@ public class UserDaoImpl implements UserDao{
 	
 	@Override
 	public void deleteUser(User user) {
-		try(Connection cnx = ConnectionProvider.getConnection()) {
-			PreparedStatement pStmt = cnx.prepareStatement(DELETE_USER);
-			pStmt.setInt(1, user.getNoUser());
-			
-			pStmt.executeUpdate();
-			
-		}catch (SQLException e) {
+		try(Connection cnx = ConnectionProvider.getConnection()){
+			cnx.setAutoCommit(false);
+			try {
+				PreparedStatement pStmtItems = cnx.prepareStatement(DELETE_ITEMS_BY_USER);
+				pStmtItems.setInt(1, user.getNoUser());
+				pStmtItems.executeUpdate();
+				PreparedStatement pStmtUser = cnx.prepareStatement(DELETE_USER);
+				pStmtUser.setInt(1, user.getNoUser());
+				pStmtUser.executeUpdate();
+				cnx.commit();	
+			} catch (SQLException e) {
+				System.err.println("rollback");
+				e.printStackTrace();
+				cnx.rollback();
+			}
+		} catch (SQLException e) {
 			e.printStackTrace();
-		}
+		}	
 		
 	}
 
