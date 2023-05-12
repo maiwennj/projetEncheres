@@ -61,7 +61,7 @@
 							<img alt="article vendu" src="<%=request.getContextPath()%>/assets/images-item/300x250.svg">
 						</div>
 						<div class="col-6">
-							<p><%= itemDetails.getItemTitle() %></p>
+							<h2><%= itemDetails.getItemTitle() %></h2>
 							<div class="row">
 								<p>Description: <%= itemDetails.getDescription() %></p>
 							</div>
@@ -119,7 +119,7 @@
 							<img alt="article vendu" src="<%=request.getContextPath()%>/assets/images-item/300x250.svg">
 						</div>
 						<div class="col-6">
-							<p><%= itemDetails.getItemTitle() %></p>
+							<h2><%= itemDetails.getItemTitle() %></h2>
 							<div class="row">
 								<p>Description: <%= itemDetails.getDescription() %></p>
 							</div>
