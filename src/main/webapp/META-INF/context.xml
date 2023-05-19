@@ -10,7 +10,7 @@
 		password="Pa$$w0rd"
 		
 		maxTotal="100"
-		mawWaitMillis="5000"
+		maxWaitMillis="5000"
 	/>
 	
 </Context>
